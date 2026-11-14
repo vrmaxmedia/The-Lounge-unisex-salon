@@ -59,7 +59,7 @@ const CLIENT_CONFIG = {
   logoUrl: "/logo.png",
 
   // TODO: Asli Google review link yahan daalo (Copy & Paste on Google button isi par khulta hai)
-  googleReviewUrl: "https://www.justdial.com/Pathankot/The-Lounge-Unisex-Salon-Near-Bedi-Petrol-Pump-Pathankot-Junction/9999PX186-X186-250821125144-S4C7_BZDET/writereview?fromFlow=1&ratingPresent=1&rate=5&defFid=1669890460968692&fromRevCta=1&scrollToTags=1",
+  googleReviewUrl: "https://search.google.com/local/writereview?placeid=PLACE_ID_YAHAN",
 
   mapSearch: "The Lounge Unisex Salon, Pathankot Junction, Pathankot, Punjab",
   // Asli Google Maps share link mil jaye toh yahan replace kar sakte ho.
@@ -79,7 +79,7 @@ const CLIENT_CONFIG = {
 
   // Jis link ki value khali hai, uska button page par nahi dikhega.
   // Asli link aane par bas yahan daal do, button apne aap aa jayega.
-  instagramUrl: "https://www.instagram.com/theloungeunisexsalon?mdxt=eWNjNXVtZTVwaDVy",
+  instagramUrl: "",
   facebookUrl: "",
   websiteUrl: "",
   youtubeUrl: "",
@@ -473,6 +473,9 @@ END:VCARD`;
 
       <div className="main-content-flow">
 
+        <section className="hero-screen">
+        <div className="hero-top">
+
         {/* Logo */}
         <div className="brand-medallion-badge">
           <div className="logo-ring">
@@ -508,6 +511,10 @@ END:VCARD`;
           <span>★</span>
           <span>★</span>
         </div>
+
+        </div>
+
+        <div className="hero-mid">
 
         <p className="experience-tracker-title">
           SHARE YOUR EXPERIENCE
@@ -553,6 +560,8 @@ END:VCARD`;
               </button>
             );
           })}
+        </div>
+
         </div>
 
         {/* Review Box */}
@@ -619,6 +628,8 @@ END:VCARD`;
             Please review the wording before posting.
           </p>
         </div>
+
+        </section>
 
         {/* Quick Actions */}
         <div className="quick-actions-card">
@@ -1181,6 +1192,33 @@ END:VCARD`;
           align-items: center;
         }
 
+        /* Pehli screen: review box hamesha bottom ke paas, baaki jagah upar ke elements mein */
+        .hero-screen {
+          width: 100%;
+          box-sizing: border-box;
+          min-height: calc(100vh - 12px);
+          min-height: calc(100dvh - 12px);
+          padding-bottom: 14px;
+          margin-bottom: 16px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+        }
+
+        .hero-top,
+        .hero-mid {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .hero-screen .signature-review-box {
+          margin-bottom: 0;
+        }
+
         .main-content-flow {
           position: relative;
           z-index: 1;
@@ -1204,7 +1242,7 @@ END:VCARD`;
         .logo-ring {
           padding: 4px;
           border-radius: 50%;
-          margin-bottom: 9px;
+          margin-bottom: 12px;
           background: conic-gradient(
             from 140deg,
             var(--c-gold-deep),
@@ -1221,8 +1259,10 @@ END:VCARD`;
         }
 
         .logo-circle-container {
-          width: 76px;
-          height: 76px;
+          width: 88px;
+          height: 88px;
+          width: clamp(72px, 12.5dvh, 108px);
+          height: clamp(72px, 12.5dvh, 108px);
           border-radius: 50%;
           background-color: #000000;
           background-size: cover;
@@ -1247,12 +1287,12 @@ END:VCARD`;
 
         .brand-main-title {
           font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
-          font-size: 15.5px;
+          font-size: 17px;
           line-height: 1.25;
           font-weight: 700;
           text-transform: uppercase;
-          letter-spacing: 2.3px;
-          margin: 0 0 4px;
+          letter-spacing: 2.5px;
+          margin: 0 0 6px;
 
           background: linear-gradient(
             180deg,
@@ -1269,10 +1309,10 @@ END:VCARD`;
         .brand-serif-subtitle {
           font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
           font-style: italic;
-          font-size: 11.5px;
+          font-size: 12px;
           line-height: 1.35;
           color: var(--c-muted);
-          margin: 0 0 2px;
+          margin: 0 0 4px;
           letter-spacing: 0.3px;
         }
 
@@ -1281,7 +1321,7 @@ END:VCARD`;
           align-items: center;
           justify-content: center;
           width: 85%;
-          margin: 4px auto 6px;
+          margin: 8px auto 10px;
           gap: 10px;
         }
 
@@ -1305,9 +1345,9 @@ END:VCARD`;
           display: flex;
           gap: 4px;
           color: var(--c-gold);
-          font-size: 13px;
+          font-size: 14px;
           line-height: 1.15;
-          margin-bottom: 2px;
+          margin-bottom: 6px;
           text-shadow: 0 0 10px rgba(var(--c-gold-rgb), 0.45);
         }
 
@@ -1317,15 +1357,15 @@ END:VCARD`;
           letter-spacing: 3px;
           color: var(--c-gold-light);
           text-transform: uppercase;
-          margin: 0 0 8px;
+          margin: 0 0 12px;
         }
 
         .floating-pills-cloud {
           display: flex;
           flex-wrap: wrap;
           justify-content: center;
-          gap: 6px 5px;
-          margin: 0 auto 7px;
+          gap: 9px 6px;
+          margin: 0 auto 12px;
           width: 100%;
         }
 
@@ -1333,7 +1373,7 @@ END:VCARD`;
           text-align: center;
           font-size: 10.5px;
           color: var(--c-muted);
-          margin: 0 0 8px;
+          margin: 0 0 10px;
           letter-spacing: 0.3px;
         }
 
@@ -1344,8 +1384,8 @@ END:VCARD`;
         .embossed-pill {
           position: relative;
           border-radius: 999px;
-          padding: 4.5px 10.5px;
-          font-size: 10.5px;
+          padding: 5.5px 11px;
+          font-size: 10.8px;
           line-height: 1.4;
           letter-spacing: 0.2px;
 
@@ -1428,7 +1468,7 @@ END:VCARD`;
           border-radius: 999px;
           padding: 3px;
           gap: 3px;
-          margin: 0 auto 12px;
+          margin: 0 auto 4px;
 
           box-shadow:
             0 5px 12px rgba(var(--c-shadow-rgb), 0.5),
