@@ -1174,7 +1174,7 @@ END:VCARD`;
           min-height: 100vh;
           min-height: 100dvh;
           background: transparent;
-          padding: 6px 16px 24px;
+          padding: 18px 16px 24px;
           box-sizing: border-box;
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
           color: var(--c-text);
@@ -1195,7 +1195,7 @@ END:VCARD`;
         }
 
         .brand-medallion-badge {
-          margin-top: 0;
+          margin-top: 4px;
           margin-bottom: 0;
           display: flex;
           flex-direction: column;
@@ -1206,7 +1206,7 @@ END:VCARD`;
         .logo-ring {
           padding: 4px;
           border-radius: 50%;
-          margin-bottom: 6px;
+          margin-bottom: 12px;
           background: conic-gradient(
             from 140deg,
             var(--c-gold-deep),
@@ -1223,8 +1223,8 @@ END:VCARD`;
         }
 
         .logo-circle-container {
-          width: 82px;
-          height: 82px;
+          width: 92px;
+          height: 92px;
           border-radius: 50%;
           background-color: #000000;
           background-size: cover;
@@ -1250,11 +1250,11 @@ END:VCARD`;
         .brand-main-title {
           font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
           font-size: 16px;
-          line-height: 1.25;
+          line-height: 1.3;
           font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 2.4px;
-          margin: 0 0 3px;
+          margin: 0 0 6px;
 
           background: linear-gradient(
             180deg,
@@ -1272,9 +1272,9 @@ END:VCARD`;
           font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
           font-style: italic;
           font-size: 11.5px;
-          line-height: 1.35;
+          line-height: 1.4;
           color: var(--c-muted);
-          margin: 0 0 2px;
+          margin: 0 0 4px;
           letter-spacing: 0.3px;
         }
 
@@ -1283,7 +1283,7 @@ END:VCARD`;
           align-items: center;
           justify-content: center;
           width: 85%;
-          margin: 2px auto 5px;
+          margin: 6px auto 9px;
           gap: 10px;
         }
 
@@ -1308,8 +1308,8 @@ END:VCARD`;
           gap: 4px;
           color: var(--c-gold);
           font-size: 13px;
-          line-height: 1.1;
-          margin-bottom: 1px;
+          line-height: 1.2;
+          margin-bottom: 4px;
           text-shadow: 0 0 10px rgba(var(--c-gold-rgb), 0.45);
         }
 
@@ -1317,7 +1317,7 @@ END:VCARD`;
           text-align: center;
           font-size: 10.5px;
           color: var(--c-muted);
-          margin: 0 0 6px;
+          margin: 0 0 11px;
           letter-spacing: 0.3px;
         }
 
@@ -1327,28 +1327,28 @@ END:VCARD`;
           letter-spacing: 3px;
           color: var(--c-gold-light);
           text-transform: uppercase;
-          margin: 0 0 6px;
+          margin: 0 0 11px;
         }
 
         .floating-pills-cloud {
           display: flex;
           flex-wrap: wrap;
           justify-content: center;
-          gap: 4px;
-          margin: 0 auto 5px;
+          gap: 7px 6px;
+          margin: 0 auto 10px;
           width: 100%;
         }
 
         /* =========================================
-           PREMIUM 3D FILTER CHIPS (compact)
+           PREMIUM 3D FILTER CHIPS
            ========================================= */
 
         .embossed-pill {
           position: relative;
           border-radius: 999px;
-          padding: 3.5px 10px;
-          font-size: 10.5px;
-          line-height: 1.35;
+          padding: 6px 12px;
+          font-size: 11px;
+          line-height: 1.4;
           letter-spacing: 0.2px;
 
           background: linear-gradient(
@@ -1363,7 +1363,7 @@ END:VCARD`;
           cursor: pointer;
 
           box-shadow:
-            0 3px 6px rgba(var(--c-shadow-rgb), 0.45),
+            0 3px 7px rgba(var(--c-shadow-rgb), 0.45),
             0 1px 2px rgba(var(--c-shadow-rgb), 0.35),
             inset 0 1px 1px rgba(255, 236, 190, 0.14),
             inset 0 -1px 1px rgba(var(--c-shadow-rgb), 0.45);
@@ -1428,9 +1428,9 @@ END:VCARD`;
           background: linear-gradient(145deg, #1d1810, #110e09);
 
           border-radius: 999px;
-          padding: 3px;
+          padding: 4px;
           gap: 3px;
-          margin: 0 auto 9px;
+          margin: 0 auto 16px;
 
           box-shadow:
             0 5px 12px rgba(var(--c-shadow-rgb), 0.5),
@@ -1441,11 +1441,11 @@ END:VCARD`;
 
         .capsule-lang-btn {
           position: relative;
-          padding: 5px 18px;
+          padding: 6px 19px;
           border-radius: 999px;
           border: 1px solid transparent;
           background: transparent;
-          font-size: 9.5px;
+          font-size: 10px;
           font-weight: 700;
           letter-spacing: 0.8px;
           color: var(--c-muted);
@@ -1493,7 +1493,7 @@ END:VCARD`;
               rgba(var(--c-surface-rgb), 0.97) 100%
             );
           border-radius: 24px;
-          padding: 14px 16px 12px;
+          padding: 16px 16px 14px;
           box-sizing: border-box;
 
           box-shadow:
@@ -1501,7 +1501,7 @@ END:VCARD`;
             0 0 0 1px rgba(var(--c-gold-rgb), 0.06),
             inset 0 1px 0 rgba(255, 236, 190, 0.10);
 
-          margin-bottom: 14px;
+          margin-bottom: 16px;
           text-align: left;
 
           border: 1px solid var(--c-border);
@@ -1518,7 +1518,7 @@ END:VCARD`;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 6px;
+          margin-bottom: 8px;
         }
 
         .label-badge {
@@ -1595,12 +1595,13 @@ END:VCARD`;
           cursor: not-allowed;
         }
 
+        /* Is height se review box ki lambai control hoti hai */
         .review-display-zone {
-          min-height: 108px;
+          min-height: 128px;
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 2px 2px 4px;
+          padding: 4px 2px 6px;
         }
 
         .loader-shimmer-wrap {
@@ -1684,7 +1685,7 @@ END:VCARD`;
           text-align: center;
           color: var(--c-gold);
           font-size: 7px;
-          margin: 4px 0 8px;
+          margin: 6px 0 10px;
         }
 
         /* =========================================
@@ -1696,7 +1697,7 @@ END:VCARD`;
           overflow: hidden;
 
           width: 100%;
-          height: 46px;
+          height: 48px;
           border-radius: 999px;
 
           background: linear-gradient(
@@ -1758,7 +1759,7 @@ END:VCARD`;
           font-size: 9.5px;
           color: var(--c-muted);
           text-align: center;
-          margin: 7px 0 0;
+          margin: 9px 0 0;
           font-style: italic;
         }
 
