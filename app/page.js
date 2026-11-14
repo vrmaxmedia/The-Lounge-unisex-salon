@@ -1254,8 +1254,8 @@ END:VCARD`;
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: space-between;
-          gap: 8px;
+          justify-content: flex-start;
+          gap: 0;
         }
 
         .hero-top {
@@ -1269,13 +1269,13 @@ END:VCARD`;
         /* Chips + language: bachi hui jagah ke beech mein center */
         .hero-mid {
           width: 100%;
-          flex: 1 1 auto;
-          min-height: 0;
+          flex: 0 0 auto;
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: center;
-          padding: 6px 0;
+          justify-content: flex-start;
+          padding: 0;
+          margin-top: clamp(14px, 2.6svh, 24px);
         }
 
         /* Language dock + review box ek saath, thoda sa gap */
@@ -1286,6 +1286,7 @@ END:VCARD`;
           flex-direction: column;
           align-items: center;
           gap: 7px;
+          margin-top: clamp(8px, 1.4svh, 12px);
         }
 
         /* Review box ke liye fixed jagah: text badhne par box neeche ki taraf
@@ -1458,7 +1459,7 @@ END:VCARD`;
           text-align: center;
           font-size: 10.5px;
           color: var(--c-muted);
-          margin: 0 0 clamp(8px, 1.4svh, 12px);
+          margin: 0;
           letter-spacing: 0.3px;
         }
 
