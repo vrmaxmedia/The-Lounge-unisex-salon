@@ -4,12 +4,14 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 
 /* =====================================================================
-   GALLERY (abhi khali hai, isliye page par gallery section nahi dikhega)
+   GALLERY
 
    Photos aane par:
    1. photos ko root ke "gallery" folder mein photo1.webp, photo2.webp ... naam se rakho
    2. neeche ke import lines se // hata do (jitni photos hain utni hi lines)
-   3. GALLERY_IMAGES array mein wahi photo names daalo
+   3. GALLERY_IMAGES array mein wahi photo names se // hata do
+
+   Jab tak photos nahi hain, gallery section "coming soon" slides ke saath dikhega.
    ===================================================================== */
 
 // import photo1 from "../gallery/photo1.webp";
@@ -39,6 +41,10 @@ const GALLERY_IMAGES = [
   // photo11,
   // photo12,
 ];
+
+// Photos nahi hain toh 3 placeholder slides (null) dikhengi
+const GALLERY_SLIDES =
+  GALLERY_IMAGES.length > 0 ? GALLERY_IMAGES : [null, null, null];
 
 const CLIENT_CONFIG = {
   clientId: "the_lounge_unisex_salon_01",
@@ -235,10 +241,10 @@ export default function UniversalReviewPage() {
 
   // Gallery automatic sliding - every 3 seconds
   useEffect(() => {
-    if (!mounted || GALLERY_IMAGES.length === 0) return;
+    if (!mounted || GALLERY_SLIDES.length === 0) return;
 
     const galleryTimer = window.setInterval(() => {
-      setGalleryIndex((current) => (current + 1) % GALLERY_IMAGES.length);
+      setGalleryIndex((current) => (current + 1) % GALLERY_SLIDES.length);
     }, 3000);
 
     return () => window.clearInterval(galleryTimer);
@@ -257,12 +263,12 @@ export default function UniversalReviewPage() {
 
     if (difference > 0) {
       // Swipe left: next image
-      setGalleryIndex((current) => (current + 1) % GALLERY_IMAGES.length);
+      setGalleryIndex((current) => (current + 1) % GALLERY_SLIDES.length);
     } else {
       // Swipe right: previous image
       setGalleryIndex(
         (current) =>
-          (current - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length
+          (current - 1 + GALLERY_SLIDES.length) % GALLERY_SLIDES.length
       );
     }
   }
@@ -270,12 +276,12 @@ export default function UniversalReviewPage() {
   function handleGalleryPrevious() {
     setGalleryIndex(
       (current) =>
-        (current - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length
+        (current - 1 + GALLERY_SLIDES.length) % GALLERY_SLIDES.length
     );
   }
 
   function handleGalleryNext() {
-    setGalleryIndex((current) => (current + 1) % GALLERY_IMAGES.length);
+    setGalleryIndex((current) => (current + 1) % GALLERY_SLIDES.length);
   }
 
   const generateAIReview = useCallback(async (labels, lang) => {
@@ -872,11 +878,12 @@ END:VCARD`;
 
         {/* =========================================
             PREMIUM SALON PHOTO GALLERY
-            12 STATIC IMAGES - NO API / NO URL LIST
+            Photos na hon toh shining placeholder slides dikhengi
             ========================================= */}
 
-        {GALLERY_IMAGES.length > 0 && (
         <section className="cafe-gallery-section" aria-label="Salon photo gallery">
+
+          <span className="gallery-section-shine" aria-hidden="true"></span>
 
           <div className="gallery-heading">
             <span className="gallery-eyebrow">
@@ -907,28 +914,43 @@ END:VCARD`;
                 transform: `translateX(-${galleryIndex * 100}%)`,
               }}
             >
-              {GALLERY_IMAGES.map((image, index) => (
+              {GALLERY_SLIDES.map((image, index) => (
                 <div
                   className="gallery-slide"
                   key={`lounge-gallery-${index + 1}`}
                 >
                   <div className="gallery-image-frame">
-                    <Image
-                      src={image}
-                      alt={`The Lounge Unisex Salon Pathankot gallery photo ${index + 1}`}
-                      fill
-                      sizes="(max-width: 410px) 100vw, 410px"
-                      quality={90}
-                      priority={index === 0}
-                      loading={index === 0 ? "eager" : "lazy"}
-                      draggable={false}
-                      style={{
-                        objectFit: "contain",
-                        padding: "7px",
-                        boxSizing: "border-box",
-                        userSelect: "none",
-                      }}
-                    />
+                    {image ? (
+                      <Image
+                        src={image}
+                        alt={`The Lounge Unisex Salon Pathankot gallery photo ${index + 1}`}
+                        fill
+                        sizes="(max-width: 410px) 100vw, 410px"
+                        quality={90}
+                        priority={index === 0}
+                        loading={index === 0 ? "eager" : "lazy"}
+                        draggable={false}
+                        style={{
+                          objectFit: "contain",
+                          padding: "7px",
+                          boxSizing: "border-box",
+                          userSelect: "none",
+                        }}
+                      />
+                    ) : (
+                      <div className="gallery-placeholder">
+                        <span className="gallery-placeholder-gem">◆</span>
+                        <span className="gallery-placeholder-title">
+                          The Lounge
+                        </span>
+                        <span className="gallery-placeholder-text">
+                          Photos coming soon
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Shining sweep over every slide */}
+                    <span className="gallery-frame-shine" aria-hidden="true"></span>
                   </div>
                 </div>
               ))}
@@ -982,7 +1004,7 @@ END:VCARD`;
           <div className="gallery-bottom-controls">
 
             <div className="gallery-dots" aria-label="Gallery slides">
-              {GALLERY_IMAGES.map((_, index) => (
+              {GALLERY_SLIDES.map((_, index) => (
                 <button
                   key={`gallery-dot-${index + 1}`}
                   type="button"
@@ -999,12 +1021,11 @@ END:VCARD`;
             <span className="gallery-counter">
               {String(galleryIndex + 1).padStart(2, "0")}
               <span className="gallery-counter-divider"> / </span>
-              {String(GALLERY_IMAGES.length).padStart(2, "0")}
+              {String(GALLERY_SLIDES.length).padStart(2, "0")}
             </span>
 
           </div>
         </section>
-        )}
 
         {/* Map Card */}
         <div className="embedded-map-card">
@@ -1153,7 +1174,7 @@ END:VCARD`;
           min-height: 100vh;
           min-height: 100dvh;
           background: transparent;
-          padding: 10px 16px 24px;
+          padding: 6px 16px 24px;
           box-sizing: border-box;
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
           color: var(--c-text);
@@ -1174,8 +1195,8 @@ END:VCARD`;
         }
 
         .brand-medallion-badge {
-          margin-top: 2px;
-          margin-bottom: 2px;
+          margin-top: 0;
+          margin-bottom: 0;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -1183,9 +1204,9 @@ END:VCARD`;
 
         /* Double gold ring around the logo */
         .logo-ring {
-          padding: 5px;
+          padding: 4px;
           border-radius: 50%;
-          margin-bottom: 10px;
+          margin-bottom: 6px;
           background: conic-gradient(
             from 140deg,
             var(--c-gold-deep),
@@ -1196,14 +1217,14 @@ END:VCARD`;
             var(--c-gold-deep)
           );
           box-shadow:
-            0 14px 30px rgba(var(--c-shadow-rgb), 0.55),
-            0 0 26px rgba(var(--c-gold-rgb), 0.22);
+            0 12px 26px rgba(var(--c-shadow-rgb), 0.55),
+            0 0 24px rgba(var(--c-gold-rgb), 0.22);
           animation: floatLogo 3.5s ease-in-out infinite;
         }
 
         .logo-circle-container {
-          width: 104px;
-          height: 104px;
+          width: 82px;
+          height: 82px;
           border-radius: 50%;
           background-color: #000000;
           background-size: cover;
@@ -1219,7 +1240,7 @@ END:VCARD`;
 
         @keyframes floatLogo {
           0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-6px); }
+          50% { transform: translateY(-4px); }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -1228,12 +1249,12 @@ END:VCARD`;
 
         .brand-main-title {
           font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
-          font-size: 17px;
-          line-height: 1.3;
+          font-size: 16px;
+          line-height: 1.25;
           font-weight: 700;
           text-transform: uppercase;
-          letter-spacing: 2.6px;
-          margin: 0 0 6px;
+          letter-spacing: 2.4px;
+          margin: 0 0 3px;
 
           background: linear-gradient(
             180deg,
@@ -1250,9 +1271,10 @@ END:VCARD`;
         .brand-serif-subtitle {
           font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
           font-style: italic;
-          font-size: 12.5px;
+          font-size: 11.5px;
+          line-height: 1.35;
           color: var(--c-muted);
-          margin: 0 0 4px;
+          margin: 0 0 2px;
           letter-spacing: 0.3px;
         }
 
@@ -1261,7 +1283,7 @@ END:VCARD`;
           align-items: center;
           justify-content: center;
           width: 85%;
-          margin: 4px auto 8px;
+          margin: 2px auto 5px;
           gap: 10px;
         }
 
@@ -1285,46 +1307,48 @@ END:VCARD`;
           display: flex;
           gap: 4px;
           color: var(--c-gold);
-          font-size: 14px;
-          margin-bottom: 2px;
+          font-size: 13px;
+          line-height: 1.1;
+          margin-bottom: 1px;
           text-shadow: 0 0 10px rgba(var(--c-gold-rgb), 0.45);
         }
 
         .chip-hint {
           text-align: center;
-          font-size: 11px;
+          font-size: 10.5px;
           color: var(--c-muted);
-          margin: 0 0 8px;
+          margin: 0 0 6px;
           letter-spacing: 0.3px;
         }
 
         .experience-tracker-title {
-          font-size: 9px;
+          font-size: 8.5px;
           font-weight: 800;
           letter-spacing: 3px;
           color: var(--c-gold-light);
           text-transform: uppercase;
-          margin: 0 0 8px;
+          margin: 0 0 6px;
         }
 
         .floating-pills-cloud {
           display: flex;
           flex-wrap: wrap;
           justify-content: center;
-          gap: 5px;
-          margin: 0 auto 8px;
+          gap: 4px;
+          margin: 0 auto 5px;
           width: 100%;
         }
 
         /* =========================================
-           PREMIUM 3D FILTER CHIPS
+           PREMIUM 3D FILTER CHIPS (compact)
            ========================================= */
 
         .embossed-pill {
           position: relative;
           border-radius: 999px;
-          padding: 6px 12px;
-          font-size: 11.5px;
+          padding: 3.5px 10px;
+          font-size: 10.5px;
+          line-height: 1.35;
           letter-spacing: 0.2px;
 
           background: linear-gradient(
@@ -1339,7 +1363,7 @@ END:VCARD`;
           cursor: pointer;
 
           box-shadow:
-            0 4px 8px rgba(var(--c-shadow-rgb), 0.45),
+            0 3px 6px rgba(var(--c-shadow-rgb), 0.45),
             0 1px 2px rgba(var(--c-shadow-rgb), 0.35),
             inset 0 1px 1px rgba(255, 236, 190, 0.14),
             inset 0 -1px 1px rgba(var(--c-shadow-rgb), 0.45);
@@ -1356,7 +1380,7 @@ END:VCARD`;
           transform: translateY(-2px);
           border-color: rgba(var(--c-gold-rgb), 0.6);
           box-shadow:
-            0 7px 12px rgba(var(--c-shadow-rgb), 0.5),
+            0 6px 10px rgba(var(--c-shadow-rgb), 0.5),
             0 0 12px rgba(var(--c-gold-rgb), 0.14),
             inset 0 1px 1px rgba(255, 236, 190, 0.2);
         }
@@ -1382,7 +1406,7 @@ END:VCARD`;
           border: 1px solid var(--c-gold-light);
 
           box-shadow:
-            0 5px 12px rgba(var(--c-gold-rgb), 0.30),
+            0 4px 10px rgba(var(--c-gold-rgb), 0.30),
             0 2px 4px rgba(var(--c-shadow-rgb), 0.4),
             inset 0 1px 1px rgba(255, 255, 255, 0.55),
             inset 0 -2px 2px rgba(120, 85, 20, 0.35);
@@ -1404,12 +1428,12 @@ END:VCARD`;
           background: linear-gradient(145deg, #1d1810, #110e09);
 
           border-radius: 999px;
-          padding: 4px;
+          padding: 3px;
           gap: 3px;
-          margin: 0 auto 12px;
+          margin: 0 auto 9px;
 
           box-shadow:
-            0 6px 14px rgba(var(--c-shadow-rgb), 0.5),
+            0 5px 12px rgba(var(--c-shadow-rgb), 0.5),
             inset 0 1px 2px rgba(var(--c-shadow-rgb), 0.6);
 
           border: 1px solid var(--c-border);
@@ -1417,11 +1441,11 @@ END:VCARD`;
 
         .capsule-lang-btn {
           position: relative;
-          padding: 6px 19px;
+          padding: 5px 18px;
           border-radius: 999px;
           border: 1px solid transparent;
           background: transparent;
-          font-size: 10px;
+          font-size: 9.5px;
           font-weight: 700;
           letter-spacing: 0.8px;
           color: var(--c-muted);
@@ -1469,7 +1493,7 @@ END:VCARD`;
               rgba(var(--c-surface-rgb), 0.97) 100%
             );
           border-radius: 24px;
-          padding: 18px;
+          padding: 14px 16px 12px;
           box-sizing: border-box;
 
           box-shadow:
@@ -1477,7 +1501,7 @@ END:VCARD`;
             0 0 0 1px rgba(var(--c-gold-rgb), 0.06),
             inset 0 1px 0 rgba(255, 236, 190, 0.10);
 
-          margin-bottom: 16px;
+          margin-bottom: 14px;
           text-align: left;
 
           border: 1px solid var(--c-border);
@@ -1494,7 +1518,7 @@ END:VCARD`;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 10px;
+          margin-bottom: 6px;
         }
 
         .label-badge {
@@ -1525,7 +1549,7 @@ END:VCARD`;
           display: inline-flex;
           align-items: center;
 
-          padding: 6px 13px;
+          padding: 5px 12px;
           border-radius: 999px;
 
           background: linear-gradient(145deg, #2a2216 0%, #16120c 100%);
@@ -1572,11 +1596,11 @@ END:VCARD`;
         }
 
         .review-display-zone {
-          min-height: 132px;
+          min-height: 108px;
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 4px 2px 8px;
+          padding: 2px 2px 4px;
         }
 
         .loader-shimmer-wrap {
@@ -1619,8 +1643,8 @@ END:VCARD`;
 
         .review-body-text {
           font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
-          font-size: 14.5px;
-          line-height: 1.65;
+          font-size: 13.5px;
+          line-height: 1.6;
           color: var(--c-text);
           margin: 0;
           width: 100%;
@@ -1660,7 +1684,7 @@ END:VCARD`;
           text-align: center;
           color: var(--c-gold);
           font-size: 7px;
-          margin: 6px 0 10px;
+          margin: 4px 0 8px;
         }
 
         /* =========================================
@@ -1672,7 +1696,7 @@ END:VCARD`;
           overflow: hidden;
 
           width: 100%;
-          height: 50px;
+          height: 46px;
           border-radius: 999px;
 
           background: linear-gradient(
@@ -1734,7 +1758,7 @@ END:VCARD`;
           font-size: 9.5px;
           color: var(--c-muted);
           text-align: center;
-          margin: 8px 0 0;
+          margin: 7px 0 0;
           font-style: italic;
         }
 
@@ -2203,10 +2227,11 @@ END:VCARD`;
         }
 
         /* =========================================
-           PREMIUM SALON GALLERY
+           PREMIUM SALON GALLERY (with shining effect)
            ========================================= */
 
         .cafe-gallery-section {
+          position: relative;
           width: 100%;
           box-sizing: border-box;
           padding: 17px 13px 14px;
@@ -2214,16 +2239,48 @@ END:VCARD`;
 
           background: rgba(var(--c-surface-rgb), 0.95);
           border: 1px solid var(--c-border);
+          border-top: 3px solid var(--c-gold);
           border-radius: 22px;
 
           box-shadow:
             0 14px 32px rgba(var(--c-shadow-rgb), 0.5),
+            0 0 22px rgba(var(--c-gold-rgb), 0.08),
             inset 0 1px 0 rgba(255, 236, 190, 0.08);
 
+          outline: 1px solid rgba(var(--c-gold-rgb), 0.12);
+          outline-offset: -6px;
+
           overflow: hidden;
+          isolation: isolate;
+        }
+
+        /* Poore gallery card par halka gold shine sweep */
+        .gallery-section-shine {
+          position: absolute;
+          top: -10%;
+          left: -70%;
+          width: 30%;
+          height: 120%;
+          background: linear-gradient(
+            100deg,
+            rgba(255, 236, 190, 0) 0%,
+            rgba(255, 236, 190, 0.10) 50%,
+            rgba(255, 236, 190, 0) 100%
+          );
+          transform: skewX(-20deg);
+          animation: gallerySectionShine 6s ease-in-out infinite;
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        @keyframes gallerySectionShine {
+          0% { left: -70%; }
+          60%, 100% { left: 150%; }
         }
 
         .gallery-heading {
+          position: relative;
+          z-index: 1;
           text-align: center;
           margin: 0 0 13px;
         }
@@ -2240,11 +2297,21 @@ END:VCARD`;
 
         .gallery-title {
           font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
-          color: var(--c-gold-light);
           font-size: 21px;
           font-weight: 700;
           line-height: 1.2;
           margin: 0 0 5px;
+
+          background: linear-gradient(
+            180deg,
+            var(--c-gold-light) 0%,
+            var(--c-gold) 60%,
+            var(--c-gold-deep) 100%
+          );
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          color: var(--c-gold-light);
         }
 
         .gallery-subtitle {
@@ -2258,6 +2325,7 @@ END:VCARD`;
 
         .gallery-slider {
           position: relative;
+          z-index: 1;
           width: 100%;
           overflow: hidden;
           border-radius: 17px;
@@ -2307,11 +2375,12 @@ END:VCARD`;
 
           background: linear-gradient(145deg, #1d1810 0%, #0f0c08 100%);
 
-          border: 1px solid var(--c-border);
+          border: 1px solid rgba(var(--c-gold-rgb), 0.4);
 
           box-shadow:
             0 4px 14px rgba(var(--c-shadow-rgb), 0.45),
-            inset 0 1px 2px rgba(255, 236, 190, 0.08);
+            0 0 14px rgba(var(--c-gold-rgb), 0.10),
+            inset 0 1px 2px rgba(255, 236, 190, 0.10);
         }
 
         .gallery-image-frame img {
@@ -2319,11 +2388,87 @@ END:VCARD`;
           -webkit-user-drag: none;
         }
 
+        /* Har slide par gold shining sweep */
+        .gallery-frame-shine {
+          position: absolute;
+          top: -20%;
+          left: -60%;
+          width: 32%;
+          height: 140%;
+          background: linear-gradient(
+            100deg,
+            rgba(255, 236, 190, 0) 0%,
+            rgba(255, 236, 190, 0.28) 50%,
+            rgba(255, 236, 190, 0) 100%
+          );
+          transform: skewX(-20deg);
+          animation: galleryFrameShine 4s ease-in-out infinite;
+          pointer-events: none;
+          z-index: 3;
+        }
+
+        @keyframes galleryFrameShine {
+          0% { left: -60%; }
+          55%, 100% { left: 135%; }
+        }
+
+        /* Placeholder slide (jab tak photos nahi aati) */
+        .gallery-placeholder {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+
+          background:
+            radial-gradient(
+              70% 60% at 50% 40%,
+              rgba(var(--c-gold-rgb), 0.14),
+              transparent 70%
+            ),
+            linear-gradient(145deg, #1d1810 0%, #0f0c08 100%);
+        }
+
+        .gallery-placeholder-gem {
+          color: var(--c-gold);
+          font-size: 14px;
+          text-shadow: 0 0 14px rgba(var(--c-gold-rgb), 0.7);
+        }
+
+        .gallery-placeholder-title {
+          font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+          font-size: 19px;
+          font-weight: 700;
+          letter-spacing: 3px;
+          text-transform: uppercase;
+
+          background: linear-gradient(
+            180deg,
+            var(--c-gold-light) 0%,
+            var(--c-gold) 60%,
+            var(--c-gold-deep) 100%
+          );
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          color: var(--c-gold);
+        }
+
+        .gallery-placeholder-text {
+          font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+          font-size: 11px;
+          font-style: italic;
+          letter-spacing: 0.6px;
+          color: var(--c-muted);
+        }
+
         /* Subtle previous / next controls */
 
         .gallery-arrow {
           position: absolute;
-          z-index: 2;
+          z-index: 4;
           top: 50%;
           transform: translateY(-50%);
 
@@ -2377,6 +2522,8 @@ END:VCARD`;
         }
 
         .gallery-bottom-controls {
+          position: relative;
+          z-index: 1;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -2586,7 +2733,7 @@ END:VCARD`;
           }
 
           .brand-main-title {
-            font-size: 15px;
+            font-size: 14.5px;
             letter-spacing: 2px;
           }
         }
@@ -2599,6 +2746,12 @@ END:VCARD`;
           .gallery-dot,
           .gallery-arrow {
             transition: none;
+          }
+
+          .gallery-frame-shine,
+          .gallery-section-shine {
+            animation: none !important;
+            display: none;
           }
         }
 
