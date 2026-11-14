@@ -1293,7 +1293,7 @@ END:VCARD`;
            isi jagah mein failta hai, upar ka ya neeche ka page nahi hilta */
         .review-slot {
           width: 100%;
-          min-height: 246px;
+          min-height: 280px;
         }
 
         .hero-screen .signature-review-box {
@@ -1726,7 +1726,7 @@ END:VCARD`;
            ========================================= */
 
         .review-display-zone {
-          min-height: 84px;
+          min-height: 118px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -2856,11 +2856,11 @@ END:VCARD`;
           }
 
           .review-display-zone {
-            min-height: 72px;
+            min-height: 100px;
           }
 
           .review-slot {
-            min-height: 232px;
+            min-height: 262px;
           }
 
           .full-luxury-copy-btn {
