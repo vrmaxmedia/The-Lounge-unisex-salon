@@ -212,6 +212,7 @@ async function copyToClipboard(text) {
 
 export default function UniversalReviewPage() {
   const [mounted, setMounted] = useState(false);
+  const [ready, setReady] = useState(false);
   const [selectedLabels, setSelectedLabels] = useState(["All"]);
   const firstRunRef = useRef(true);
   const [language, setLanguage] = useState("ENGLISH");
@@ -233,7 +234,16 @@ export default function UniversalReviewPage() {
   useEffect(() => {
     setMounted(true);
 
+    // Styles lagne ke baad hi page dikhao (2 frame ruk kar), taaki refresh par
+    // bina-style / toota hua structure kabhi na dikhe.
+    let raf2;
+    const raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => setReady(true));
+    });
+
     return () => {
+      cancelAnimationFrame(raf1);
+      if (raf2) cancelAnimationFrame(raf2);
       requestIdRef.current++;
       abortControllerRef.current?.abort();
     };
@@ -459,7 +469,25 @@ END:VCARD`;
      Ab page seedha render hota hai, mounted sirf effects ke liye hai. */
 
   return (
-    <main className="soft-luxury-viewport">
+    <>
+    {/* Inline-styled dark cover: CSS aane se pehle bhi white/khula background nahi dikhega */}
+    <div
+      aria-hidden="true"
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "#0b0a09",
+        zIndex: 0,
+      }}
+    />
+
+    <main
+      className="soft-luxury-viewport"
+      style={{
+        opacity: ready ? 1 : 0,
+        transition: "opacity 0.45s ease",
+      }}
+    >
 
       {/* Fixed Background */}
       <div className="fixed-bg"></div>
@@ -537,7 +565,12 @@ END:VCARD`;
             Tap up to 3 keywords for your review
           </p>
 
-          {/* Language Selector */}
+
+        </div>
+
+        <div className="hero-bottom">
+
+        {/* Language Selector */}
           <div className="capsule-lang-dock">
             {["ENGLISH", "HINGLISH"].map((lang) => {
               const active = language === lang;
@@ -555,8 +588,6 @@ END:VCARD`;
               );
             })}
           </div>
-
-        </div>
 
         {/* Review Box */}
         <div className="signature-review-box">
@@ -623,6 +654,8 @@ END:VCARD`;
           <p className="card-disclaimer-note">
             Please review the wording before posting.
           </p>
+        </div>
+
         </div>
 
         </section>
@@ -1202,9 +1235,9 @@ END:VCARD`;
         .hero-screen {
           width: 100%;
           box-sizing: border-box;
-          min-height: calc(100vh - 20px);
-          min-height: calc(100svh - 20px);
-          padding-bottom: 6px;
+          min-height: calc(100vh - 56px);
+          min-height: calc(100svh - 56px);
+          padding-bottom: 0;
           margin-bottom: 16px;
           display: flex;
           flex-direction: column;
@@ -1231,6 +1264,16 @@ END:VCARD`;
           align-items: center;
           justify-content: center;
           padding: 6px 0;
+        }
+
+        /* Language dock + review box ek saath, thoda sa gap */
+        .hero-bottom {
+          width: 100%;
+          flex: 0 0 auto;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 7px;
         }
 
         .hero-screen .signature-review-box {
@@ -1387,7 +1430,7 @@ END:VCARD`;
           display: flex;
           flex-wrap: wrap;
           justify-content: center;
-          gap: clamp(6px, 1.1svh, 9px) 6px;
+          gap: clamp(5px, 0.9svh, 8px) 5px;
           margin: 0 auto clamp(8px, 1.4svh, 12px);
           width: 100%;
         }
@@ -1407,8 +1450,8 @@ END:VCARD`;
         .embossed-pill {
           position: relative;
           border-radius: 999px;
-          padding: 5px 10px;
-          font-size: 10.5px;
+          padding: 4px 9px;
+          font-size: 10px;
           line-height: 1.4;
           letter-spacing: 0.2px;
 
@@ -1489,8 +1532,8 @@ END:VCARD`;
           background: linear-gradient(145deg, #1d1810, #110e09);
 
           border-radius: 999px;
-          padding: 3px;
-          gap: 3px;
+          padding: 2px;
+          gap: 2px;
           margin: 0 auto;
 
           box-shadow:
@@ -1502,11 +1545,11 @@ END:VCARD`;
 
         .capsule-lang-btn {
           position: relative;
-          padding: 6px 20px;
+          padding: 4px 14px;
           border-radius: 999px;
           border: 1px solid transparent;
           background: transparent;
-          font-size: 10px;
+          font-size: 9px;
           font-weight: 700;
           letter-spacing: 0.8px;
           color: var(--c-muted);
@@ -1663,18 +1706,12 @@ END:VCARD`;
            ========================================= */
 
         .review-display-zone {
-          height: clamp(88px, 13svh, 112px);
+          min-height: 84px;
           display: flex;
+          align-items: center;
+          justify-content: center;
           padding: 2px;
           box-sizing: border-box;
-          overflow-y: auto;
-          overflow-x: hidden;
-          -webkit-overflow-scrolling: touch;
-          scrollbar-width: none;
-        }
-
-        .review-display-zone::-webkit-scrollbar {
-          display: none;
         }
 
         /* margin:auto = chhota text vertically center, lamba text upar se shuru */
@@ -2799,7 +2836,7 @@ END:VCARD`;
           }
 
           .review-display-zone {
-            height: 96px;
+            min-height: 72px;
           }
 
           .full-luxury-copy-btn {
@@ -2884,5 +2921,6 @@ END:VCARD`;
 
       `}</style>
     </main>
+    </>
   );
 }
