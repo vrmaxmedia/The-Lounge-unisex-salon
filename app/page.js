@@ -1128,10 +1128,6 @@ END:VCARD`;
           background: var(--c-page) !important;
           min-height: 100% !important;
           overflow-x: hidden !important;
-          scroll-behavior: smooth;
-          -webkit-text-size-adjust: 100%;
-          -webkit-overflow-scrolling: touch;
-          overscroll-behavior-y: none;
         }
 
         /* =========================================
@@ -1206,16 +1202,15 @@ END:VCARD`;
         .hero-screen {
           width: 100%;
           box-sizing: border-box;
-          height: calc(100vh - 20px);
-          height: calc(100svh - 20px);
-          min-height: 560px;
+          min-height: calc(100vh - 20px);
+          min-height: calc(100svh - 20px);
           padding-bottom: 6px;
           margin-bottom: 16px;
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: space-between;
-          gap: 0;
+          gap: 8px;
         }
 
         .hero-top {
@@ -1266,7 +1261,7 @@ END:VCARD`;
         .logo-ring {
           padding: 4px;
           border-radius: 50%;
-          margin-bottom: clamp(12px, 2.2svh, 20px);
+          margin-bottom: clamp(8px, 1.4svh, 14px);
           background: conic-gradient(
             from 140deg,
             var(--c-gold-deep),
@@ -1286,8 +1281,8 @@ END:VCARD`;
         .logo-circle-container {
           width: 104px;
           height: 104px;
-          width: clamp(92px, 17svh, 150px);
-          height: clamp(92px, 17svh, 150px);
+          width: clamp(84px, 13svh, 130px);
+          height: clamp(84px, 13svh, 130px);
           border-radius: 50%;
           background-color: #000000;
           background-size: cover;
@@ -1313,12 +1308,13 @@ END:VCARD`;
         /* Title bada aur saaf: logo se alag, khule spacing ke saath */
         .brand-main-title {
           font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
-          font-size: clamp(21px, 3.3svh, 27px);
+          font-size: clamp(16px, 2.6svh, 21px);
           line-height: 1.2;
           font-weight: 700;
           text-transform: uppercase;
-          letter-spacing: 2.5px;
-          margin: 0 0 clamp(6px, 1.2svh, 10px);
+          letter-spacing: 1.5px;
+          white-space: nowrap;
+          margin: 0 0 clamp(4px, 0.8svh, 8px);
 
           background: linear-gradient(
             180deg,
@@ -1335,7 +1331,7 @@ END:VCARD`;
         .brand-serif-subtitle {
           font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
           font-style: italic;
-          font-size: clamp(12px, 1.75svh, 14px);
+          font-size: clamp(11px, 1.6svh, 13px);
           line-height: 1.4;
           color: var(--c-muted);
           margin: 0 0 4px;
@@ -1348,7 +1344,7 @@ END:VCARD`;
           align-items: center;
           justify-content: center;
           width: 85%;
-          margin: clamp(6px, 1.2svh, 12px) auto clamp(6px, 1.2svh, 12px);
+          margin: clamp(4px, 0.8svh, 8px) auto 0;
           gap: 10px;
         }
 
@@ -1411,8 +1407,8 @@ END:VCARD`;
         .embossed-pill {
           position: relative;
           border-radius: 999px;
-          padding: 6px 12px;
-          font-size: 11px;
+          padding: 5px 10px;
+          font-size: 10.5px;
           line-height: 1.4;
           letter-spacing: 0.2px;
 
@@ -1667,7 +1663,7 @@ END:VCARD`;
            ========================================= */
 
         .review-display-zone {
-          height: clamp(104px, 15.5svh, 142px);
+          height: clamp(88px, 13svh, 112px);
           display: flex;
           padding: 2px;
           box-sizing: border-box;
@@ -2786,12 +2782,13 @@ END:VCARD`;
            bahut chhoti screen par thoda kasa hua kiya hai.
            ========================================= */
 
-        @media (max-height: 700px) {
-          .hero-screen {
-            min-height: 520px;
+        @media (max-height: 780px) {
+          .stars-cluster {
+            display: none;
           }
+        }
 
-          .stars-cluster,
+        @media (max-height: 700px) {
           .chip-hint {
             display: none;
           }
@@ -2837,13 +2834,8 @@ END:VCARD`;
           }
 
           .brand-main-title {
-            font-size: 19px;
-            letter-spacing: 2px;
-          }
-
-          .embossed-pill {
-            padding: 5px 10px;
-            font-size: 10.5px;
+            font-size: 16px;
+            letter-spacing: 1px;
           }
         }
 
