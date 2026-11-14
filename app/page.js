@@ -454,16 +454,9 @@ END:VCARD`;
     URL.revokeObjectURL(url);
   }
 
-  if (!mounted) {
-    return (
-      <div
-        style={{
-          minHeight: "100vh",
-          backgroundColor: "#0b0a09",
-        }}
-      />
-    );
-  }
+  /* NOTE: Pehle yahan "if (!mounted) return <blank div>" tha.
+     Wahi page khulte hi blank -> content ka jhatka (flash) de raha tha.
+     Ab page seedha render hota hai, mounted sirf effects ke liye hai. */
 
   return (
     <main className="soft-luxury-viewport">
@@ -474,93 +467,94 @@ END:VCARD`;
       <div className="main-content-flow">
 
         <section className="hero-screen">
+
         <div className="hero-top">
 
-        {/* Logo */}
-        <div className="brand-medallion-badge">
-          <div className="logo-ring">
-            <div
-              className="logo-circle-container"
-              style={{
-                backgroundImage: `url(${CLIENT_CONFIG.logoUrl})`,
-              }}
-              role="img"
-              aria-label={`${CLIENT_CONFIG.businessName} logo`}
-            ></div>
+          {/* Logo */}
+          <div className="brand-medallion-badge">
+            <div className="logo-ring">
+              <div
+                className="logo-circle-container"
+                style={{
+                  backgroundImage: `url(${CLIENT_CONFIG.logoUrl})`,
+                }}
+                role="img"
+                aria-label={`${CLIENT_CONFIG.businessName} logo`}
+              ></div>
+            </div>
+
+            <h1 className="brand-main-title">
+              {CLIENT_CONFIG.businessName}
+            </h1>
           </div>
 
-          <h1 className="brand-main-title">
-            {CLIENT_CONFIG.businessName}
-          </h1>
-        </div>
+          <p className="brand-serif-subtitle">
+            {CLIENT_CONFIG.subHeading}
+          </p>
 
-        <p className="brand-serif-subtitle">
-          {CLIENT_CONFIG.subHeading}
-        </p>
+          <div className="royal-shahi-divider">
+            <span className="divider-line"></span>
+            <span className="divider-gem">◆</span>
+            <span className="divider-line"></span>
+          </div>
 
-        <div className="royal-shahi-divider">
-          <span className="divider-line"></span>
-          <span className="divider-gem">◆</span>
-          <span className="divider-line"></span>
-        </div>
-
-        <div className="stars-cluster" aria-hidden="true">
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-          <span>★</span>
-        </div>
+          <div className="stars-cluster" aria-hidden="true">
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+          </div>
 
         </div>
 
         <div className="hero-mid">
 
-        <p className="experience-tracker-title">
-          SHARE YOUR EXPERIENCE
-        </p>
+          <p className="experience-tracker-title">
+            SHARE YOUR EXPERIENCE
+          </p>
 
-        {/* Filter Chips */}
-        <div className="floating-pills-cloud">
-          {CLIENT_CONFIG.chips.map((chip) => {
-            const active = selectedLabels.includes(chip.label);
+          {/* Filter Chips */}
+          <div className="floating-pills-cloud">
+            {CLIENT_CONFIG.chips.map((chip) => {
+              const active = selectedLabels.includes(chip.label);
 
-            return (
-              <button
-                key={chip.label}
-                type="button"
-                onClick={() => handleChipChange(chip)}
-                aria-pressed={active}
-                className={`embossed-pill ${active ? "active" : ""}`}
-              >
-                {chip.label}
-              </button>
-            );
-          })}
-        </div>
+              return (
+                <button
+                  key={chip.label}
+                  type="button"
+                  onClick={() => handleChipChange(chip)}
+                  aria-pressed={active}
+                  className={`embossed-pill ${active ? "active" : ""}`}
+                >
+                  {chip.label}
+                </button>
+              );
+            })}
+          </div>
 
-        <p className="chip-hint">
-          Tap up to 3 keywords for your review
-        </p>
+          <p className="chip-hint">
+            Tap up to 3 keywords for your review
+          </p>
 
-        {/* Language Selector */}
-        <div className="capsule-lang-dock">
-          {["ENGLISH", "HINGLISH"].map((lang) => {
-            const active = language === lang;
+          {/* Language Selector */}
+          <div className="capsule-lang-dock">
+            {["ENGLISH", "HINGLISH"].map((lang) => {
+              const active = language === lang;
 
-            return (
-              <button
-                key={lang}
-                type="button"
-                onClick={() => handleLanguageChange(lang)}
-                aria-pressed={active}
-                className={`capsule-lang-btn ${active ? "active" : ""}`}
-              >
-                {lang}
-              </button>
-            );
-          })}
-        </div>
+              return (
+                <button
+                  key={lang}
+                  type="button"
+                  onClick={() => handleLanguageChange(lang)}
+                  aria-pressed={active}
+                  className={`capsule-lang-btn ${active ? "active" : ""}`}
+                >
+                  {lang}
+                </button>
+              );
+            })}
+          </div>
 
         </div>
 
@@ -584,27 +578,29 @@ END:VCARD`;
           </div>
 
           <div className="review-display-zone">
-            {loading ? (
-              <div className="loader-shimmer-wrap">
-                <span className="sparkle-icon">✦</span>
-                <span className="shimmer-text">
-                  Crafting authentic review...
-                </span>
-              </div>
-            ) : error ? (
-              <p className="review-error">{error}</p>
-            ) : reviewDraft ? (
-              <p className="review-body-text">
-                {displayText}
-                {isTyping && (
-                  <span className="typewriter-cursor"></span>
-                )}
-              </p>
-            ) : (
-              <p className="review-placeholder">
-                Your review draft will appear here.
-              </p>
-            )}
+            <div className="review-inner">
+              {loading ? (
+                <div className="loader-shimmer-wrap">
+                  <span className="sparkle-icon">✦</span>
+                  <span className="shimmer-text">
+                    Crafting authentic review...
+                  </span>
+                </div>
+              ) : error ? (
+                <p className="review-error">{error}</p>
+              ) : reviewDraft ? (
+                <p className="review-body-text">
+                  {displayText}
+                  {isTyping && (
+                    <span className="typewriter-cursor"></span>
+                  )}
+                </p>
+              ) : (
+                <p className="review-placeholder">
+                  Your review draft will appear here.
+                </p>
+              )}
+            </div>
           </div>
 
           <div className="card-ornament-center">
@@ -1132,18 +1128,22 @@ END:VCARD`;
           background: var(--c-page) !important;
           min-height: 100% !important;
           overflow-x: hidden !important;
+          scroll-behavior: smooth;
+          -webkit-text-size-adjust: 100%;
+          -webkit-overflow-scrolling: touch;
+          overscroll-behavior-y: none;
         }
 
         /* =========================================
-           FIXED BACKGROUND: black marble with gold veins
+           FIXED BACKGROUND
+           inset:0 (height:100vh/dvh nahi) -> address bar
+           chhupne/aane par background resize hoke jhatka nahi dega.
            ========================================= */
 
         .fixed-bg {
           position: fixed;
           inset: 0;
           width: 100%;
-          height: 100vh;
-          height: 100dvh;
 
           background-color: var(--c-page);
           background-image:
@@ -1171,7 +1171,9 @@ END:VCARD`;
             ),
             linear-gradient(180deg, #100e0b 0%, #090807 100%);
           background-repeat: no-repeat;
+          background-size: 100% 100%;
 
+          transform: translateZ(0);
           z-index: 0;
           pointer-events: none;
         }
@@ -1181,7 +1183,7 @@ END:VCARD`;
           isolation: isolate;
           z-index: 1;
           min-height: 100vh;
-          min-height: 100dvh;
+          min-height: 100svh;
           background: transparent;
           padding: 12px 16px 24px;
           box-sizing: border-box;
@@ -1192,30 +1194,52 @@ END:VCARD`;
           align-items: center;
         }
 
-        /* Pehli screen: review box hamesha bottom ke paas, baaki jagah upar ke elements mein */
+        /* =========================================
+           PEHLI SCREEN (HERO)
+           100svh = browser ki sabse chhoti stable height.
+           Address bar upar-neeche hone par layout hilta nahi.
+           Layout: [logo+title] ... [chips+language] ... [review box]
+           Beech ki khali jagah barabar baantti hai, aur logo/title
+           screen ki height ke hisab se bade hote hain.
+           ========================================= */
+
         .hero-screen {
           width: 100%;
           box-sizing: border-box;
-          min-height: calc(100vh - 12px);
-          min-height: calc(100dvh - 12px);
-          padding-bottom: 14px;
+          height: calc(100vh - 20px);
+          height: calc(100svh - 20px);
+          min-height: 560px;
+          padding-bottom: 6px;
           margin-bottom: 16px;
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: space-between;
-          gap: 10px;
+          gap: 0;
         }
 
-        .hero-top,
-        .hero-mid {
+        .hero-top {
           width: 100%;
+          flex: 0 0 auto;
           display: flex;
           flex-direction: column;
           align-items: center;
         }
 
+        /* Chips + language: bachi hui jagah ke beech mein center */
+        .hero-mid {
+          width: 100%;
+          flex: 1 1 auto;
+          min-height: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 6px 0;
+        }
+
         .hero-screen .signature-review-box {
+          flex: 0 0 auto;
           margin-bottom: 0;
         }
 
@@ -1231,7 +1255,7 @@ END:VCARD`;
         }
 
         .brand-medallion-badge {
-          margin-top: 2px;
+          margin-top: 4px;
           margin-bottom: 0;
           display: flex;
           flex-direction: column;
@@ -1242,7 +1266,7 @@ END:VCARD`;
         .logo-ring {
           padding: 4px;
           border-radius: 50%;
-          margin-bottom: 12px;
+          margin-bottom: clamp(12px, 2.2svh, 20px);
           background: conic-gradient(
             from 140deg,
             var(--c-gold-deep),
@@ -1254,15 +1278,16 @@ END:VCARD`;
           );
           box-shadow:
             0 10px 22px rgba(var(--c-shadow-rgb), 0.55),
-            0 0 22px rgba(var(--c-gold-rgb), 0.22);
+            0 0 26px rgba(var(--c-gold-rgb), 0.25);
           animation: floatLogo 3.5s ease-in-out infinite;
         }
 
+        /* Logo bada: screen ki height ke hisab se 92px se 150px tak */
         .logo-circle-container {
-          width: 88px;
-          height: 88px;
-          width: clamp(72px, 12.5dvh, 108px);
-          height: clamp(72px, 12.5dvh, 108px);
+          width: 104px;
+          height: 104px;
+          width: clamp(92px, 17svh, 150px);
+          height: clamp(92px, 17svh, 150px);
           border-radius: 50%;
           background-color: #000000;
           background-size: cover;
@@ -1285,14 +1310,15 @@ END:VCARD`;
           .logo-ring { animation: none; }
         }
 
+        /* Title bada aur saaf: logo se alag, khule spacing ke saath */
         .brand-main-title {
           font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
-          font-size: 17px;
-          line-height: 1.25;
+          font-size: clamp(21px, 3.3svh, 27px);
+          line-height: 1.2;
           font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 2.5px;
-          margin: 0 0 6px;
+          margin: 0 0 clamp(6px, 1.2svh, 10px);
 
           background: linear-gradient(
             180deg,
@@ -1309,11 +1335,12 @@ END:VCARD`;
         .brand-serif-subtitle {
           font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
           font-style: italic;
-          font-size: 12px;
-          line-height: 1.35;
+          font-size: clamp(12px, 1.75svh, 14px);
+          line-height: 1.4;
           color: var(--c-muted);
           margin: 0 0 4px;
           letter-spacing: 0.3px;
+          max-width: 330px;
         }
 
         .royal-shahi-divider {
@@ -1321,7 +1348,7 @@ END:VCARD`;
           align-items: center;
           justify-content: center;
           width: 85%;
-          margin: 8px auto 10px;
+          margin: clamp(6px, 1.2svh, 12px) auto clamp(6px, 1.2svh, 12px);
           gap: 10px;
         }
 
@@ -1343,29 +1370,29 @@ END:VCARD`;
 
         .stars-cluster {
           display: flex;
-          gap: 4px;
+          gap: 5px;
           color: var(--c-gold);
-          font-size: 14px;
+          font-size: clamp(14px, 2.2svh, 18px);
           line-height: 1.15;
-          margin-bottom: 6px;
+          margin-bottom: 0;
           text-shadow: 0 0 10px rgba(var(--c-gold-rgb), 0.45);
         }
 
         .experience-tracker-title {
-          font-size: 8.5px;
+          font-size: 9.5px;
           font-weight: 800;
           letter-spacing: 3px;
           color: var(--c-gold-light);
           text-transform: uppercase;
-          margin: 0 0 12px;
+          margin: 0 0 clamp(8px, 1.6svh, 14px);
         }
 
         .floating-pills-cloud {
           display: flex;
           flex-wrap: wrap;
           justify-content: center;
-          gap: 9px 6px;
-          margin: 0 auto 12px;
+          gap: clamp(6px, 1.1svh, 9px) 6px;
+          margin: 0 auto clamp(8px, 1.4svh, 12px);
           width: 100%;
         }
 
@@ -1373,7 +1400,7 @@ END:VCARD`;
           text-align: center;
           font-size: 10.5px;
           color: var(--c-muted);
-          margin: 0 0 10px;
+          margin: 0 0 clamp(8px, 1.4svh, 12px);
           letter-spacing: 0.3px;
         }
 
@@ -1384,8 +1411,8 @@ END:VCARD`;
         .embossed-pill {
           position: relative;
           border-radius: 999px;
-          padding: 5.5px 11px;
-          font-size: 10.8px;
+          padding: 6px 12px;
+          font-size: 11px;
           line-height: 1.4;
           letter-spacing: 0.2px;
 
@@ -1468,7 +1495,7 @@ END:VCARD`;
           border-radius: 999px;
           padding: 3px;
           gap: 3px;
-          margin: 0 auto 4px;
+          margin: 0 auto;
 
           box-shadow:
             0 5px 12px rgba(var(--c-shadow-rgb), 0.5),
@@ -1479,11 +1506,11 @@ END:VCARD`;
 
         .capsule-lang-btn {
           position: relative;
-          padding: 5px 18px;
+          padding: 6px 20px;
           border-radius: 999px;
           border: 1px solid transparent;
           background: transparent;
-          font-size: 9.5px;
+          font-size: 10px;
           font-weight: 700;
           letter-spacing: 0.8px;
           color: var(--c-muted);
@@ -1632,13 +1659,35 @@ END:VCARD`;
           cursor: not-allowed;
         }
 
-        /* Is height se review box ki lambai control hoti hai */
+        /* =========================================
+           REVIEW TEXT ZONE: FIXED HEIGHT
+           Pehle min-height thi, isliye typing ke saath box
+           badhta tha aur upar ke sab elements khisakte the (jhatka).
+           Ab height fixed hai; text lamba ho toh andar scroll hoga.
+           ========================================= */
+
         .review-display-zone {
-          min-height: 92px;
+          height: clamp(104px, 15.5svh, 142px);
+          display: flex;
+          padding: 2px;
+          box-sizing: border-box;
+          overflow-y: auto;
+          overflow-x: hidden;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+        }
+
+        .review-display-zone::-webkit-scrollbar {
+          display: none;
+        }
+
+        /* margin:auto = chhota text vertically center, lamba text upar se shuru */
+        .review-inner {
+          width: 100%;
+          margin: auto 0;
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 2px 2px 2px;
         }
 
         .loader-shimmer-wrap {
@@ -1723,7 +1772,7 @@ END:VCARD`;
           color: var(--c-gold);
           font-size: 7px;
           line-height: 1;
-          margin: 3px 0 7px;
+          margin: 4px 0 8px;
         }
 
         /* =========================================
@@ -1735,7 +1784,7 @@ END:VCARD`;
           overflow: hidden;
 
           width: 100%;
-          height: 44px;
+          height: 46px;
           border-radius: 999px;
 
           background: linear-gradient(
@@ -1748,7 +1797,7 @@ END:VCARD`;
           border: 1px solid var(--c-gold-light);
           color: var(--c-on-gold);
 
-          font-size: 12px;
+          font-size: 12.5px;
           font-weight: 800;
           letter-spacing: 0.6px;
           cursor: pointer;
@@ -2733,85 +2782,31 @@ END:VCARD`;
 
         /* =========================================
            CHHOTE / KAM HEIGHT WALE PHONES
-           Taaki review box ka button wahan bhi pehli screen mein dikhe
+           Sab kuch svh se scale hota hai, yahan sirf
+           bahut chhoti screen par thoda kasa hua kiya hai.
            ========================================= */
 
-        @media (max-height: 780px) {
-          .soft-luxury-viewport {
-            padding-top: 8px;
+        @media (max-height: 700px) {
+          .hero-screen {
+            min-height: 520px;
           }
 
-          .logo-circle-container {
-            width: 64px;
-            height: 64px;
-          }
-
-          .logo-ring {
-            margin-bottom: 6px;
-          }
-
-          .brand-main-title {
-            font-size: 14.5px;
-            margin-bottom: 2px;
-          }
-
-          .brand-serif-subtitle {
-            font-size: 10.5px;
-          }
-
-          .royal-shahi-divider {
-            margin: 3px auto 4px;
-          }
-
-          .experience-tracker-title {
-            margin-bottom: 6px;
-          }
-
-          .floating-pills-cloud {
-            gap: 5px 4px;
-            margin-bottom: 5px;
-          }
-
-          .embossed-pill {
-            padding: 3.5px 9px;
-            font-size: 10px;
-          }
-
-          .chip-hint {
-            margin-bottom: 6px;
-          }
-
-          .capsule-lang-dock {
-            margin-bottom: 9px;
-          }
-
-          .review-display-zone {
-            min-height: 80px;
-          }
-
-          .review-body-text {
-            font-size: 12.5px;
-            line-height: 1.5;
-          }
-
-          .full-luxury-copy-btn {
-            height: 42px;
-          }
-        }
-
-        @media (max-height: 680px) {
           .stars-cluster,
           .chip-hint {
             display: none;
           }
 
-          .logo-circle-container {
-            width: 52px;
-            height: 52px;
+          .embossed-pill {
+            padding: 4.5px 10px;
+            font-size: 10.5px;
           }
 
           .review-display-zone {
-            min-height: 70px;
+            height: 96px;
+          }
+
+          .full-luxury-copy-btn {
+            height: 42px;
           }
         }
 
@@ -2842,8 +2837,13 @@ END:VCARD`;
           }
 
           .brand-main-title {
-            font-size: 14px;
+            font-size: 19px;
             letter-spacing: 2px;
+          }
+
+          .embossed-pill {
+            padding: 5px 10px;
+            font-size: 10.5px;
           }
         }
 
