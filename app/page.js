@@ -3,32 +3,41 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 
-import photo1 from "../gallery/photo1.webp";
-import photo2 from "../gallery/photo2.webp";
-import photo3 from "../gallery/photo3.webp";
-import photo4 from "../gallery/photo4.webp";
-import photo5 from "../gallery/photo5.webp";
-import photo6 from "../gallery/photo6.webp";
-import photo7 from "../gallery/photo7.webp";
-import photo8 from "../gallery/photo8.webp";
-import photo9 from "../gallery/photo9.webp";
-import photo10 from "../gallery/photo10.webp";
-import photo11 from "../gallery/photo11.webp";
-import photo12 from "../gallery/photo12.webp";
+/* =====================================================================
+   GALLERY (abhi khali hai, isliye page par gallery section nahi dikhega)
+
+   Photos aane par:
+   1. photos ko root ke "gallery" folder mein photo1.webp, photo2.webp ... naam se rakho
+   2. neeche ke import lines se // hata do (jitni photos hain utni hi lines)
+   3. GALLERY_IMAGES array mein wahi photo names daalo
+   ===================================================================== */
+
+// import photo1 from "../gallery/photo1.webp";
+// import photo2 from "../gallery/photo2.webp";
+// import photo3 from "../gallery/photo3.webp";
+// import photo4 from "../gallery/photo4.webp";
+// import photo5 from "../gallery/photo5.webp";
+// import photo6 from "../gallery/photo6.webp";
+// import photo7 from "../gallery/photo7.webp";
+// import photo8 from "../gallery/photo8.webp";
+// import photo9 from "../gallery/photo9.webp";
+// import photo10 from "../gallery/photo10.webp";
+// import photo11 from "../gallery/photo11.webp";
+// import photo12 from "../gallery/photo12.webp";
 
 const GALLERY_IMAGES = [
-  photo1,
-  photo2,
-  photo3,
-  photo4,
-  photo5,
-  photo6,
-  photo7,
-  photo8,
-  photo9,
-  photo10,
-  photo11,
-  photo12,
+  // photo1,
+  // photo2,
+  // photo3,
+  // photo4,
+  // photo5,
+  // photo6,
+  // photo7,
+  // photo8,
+  // photo9,
+  // photo10,
+  // photo11,
+  // photo12,
 ];
 
 const CLIENT_CONFIG = {
@@ -226,7 +235,7 @@ export default function UniversalReviewPage() {
 
   // Gallery automatic sliding - every 3 seconds
   useEffect(() => {
-    if (!mounted) return;
+    if (!mounted || GALLERY_IMAGES.length === 0) return;
 
     const galleryTimer = window.setInterval(() => {
       setGalleryIndex((current) => (current + 1) % GALLERY_IMAGES.length);
@@ -866,6 +875,7 @@ END:VCARD`;
             12 STATIC IMAGES - NO API / NO URL LIST
             ========================================= */}
 
+        {GALLERY_IMAGES.length > 0 && (
         <section className="cafe-gallery-section" aria-label="Salon photo gallery">
 
           <div className="gallery-heading">
@@ -994,6 +1004,7 @@ END:VCARD`;
 
           </div>
         </section>
+        )}
 
         {/* Map Card */}
         <div className="embedded-map-card">
