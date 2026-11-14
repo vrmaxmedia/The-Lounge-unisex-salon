@@ -1094,9 +1094,7 @@ END:VCARD`;
         /* =========================================
            THE LOUNGE UNISEX SALON
            THEME: NOIR & CHAMPAGNE GOLD
-           Obsidian black surfaces, champagne gold
-           accents, ivory text, marble-vein background.
-           Poori coloring in variables mein hai, sirf
+           Poori coloring variables mein hai, sirf
            :root ke values badlo toh theme badal jayegi.
            ========================================= */
 
@@ -1174,7 +1172,7 @@ END:VCARD`;
           min-height: 100vh;
           min-height: 100dvh;
           background: transparent;
-          padding: 18px 16px 24px;
+          padding: 12px 16px 24px;
           box-sizing: border-box;
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
           color: var(--c-text);
@@ -1195,7 +1193,7 @@ END:VCARD`;
         }
 
         .brand-medallion-badge {
-          margin-top: 4px;
+          margin-top: 2px;
           margin-bottom: 0;
           display: flex;
           flex-direction: column;
@@ -1206,7 +1204,7 @@ END:VCARD`;
         .logo-ring {
           padding: 4px;
           border-radius: 50%;
-          margin-bottom: 12px;
+          margin-bottom: 9px;
           background: conic-gradient(
             from 140deg,
             var(--c-gold-deep),
@@ -1217,14 +1215,14 @@ END:VCARD`;
             var(--c-gold-deep)
           );
           box-shadow:
-            0 12px 26px rgba(var(--c-shadow-rgb), 0.55),
-            0 0 24px rgba(var(--c-gold-rgb), 0.22);
+            0 10px 22px rgba(var(--c-shadow-rgb), 0.55),
+            0 0 22px rgba(var(--c-gold-rgb), 0.22);
           animation: floatLogo 3.5s ease-in-out infinite;
         }
 
         .logo-circle-container {
-          width: 92px;
-          height: 92px;
+          width: 76px;
+          height: 76px;
           border-radius: 50%;
           background-color: #000000;
           background-size: cover;
@@ -1240,7 +1238,7 @@ END:VCARD`;
 
         @keyframes floatLogo {
           0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-4px); }
+          50% { transform: translateY(-3px); }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -1249,12 +1247,12 @@ END:VCARD`;
 
         .brand-main-title {
           font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
-          font-size: 16px;
-          line-height: 1.3;
+          font-size: 15.5px;
+          line-height: 1.25;
           font-weight: 700;
           text-transform: uppercase;
-          letter-spacing: 2.4px;
-          margin: 0 0 6px;
+          letter-spacing: 2.3px;
+          margin: 0 0 4px;
 
           background: linear-gradient(
             180deg,
@@ -1272,9 +1270,9 @@ END:VCARD`;
           font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
           font-style: italic;
           font-size: 11.5px;
-          line-height: 1.4;
+          line-height: 1.35;
           color: var(--c-muted);
-          margin: 0 0 4px;
+          margin: 0 0 2px;
           letter-spacing: 0.3px;
         }
 
@@ -1283,7 +1281,7 @@ END:VCARD`;
           align-items: center;
           justify-content: center;
           width: 85%;
-          margin: 6px auto 9px;
+          margin: 4px auto 6px;
           gap: 10px;
         }
 
@@ -1308,17 +1306,9 @@ END:VCARD`;
           gap: 4px;
           color: var(--c-gold);
           font-size: 13px;
-          line-height: 1.2;
-          margin-bottom: 4px;
+          line-height: 1.15;
+          margin-bottom: 2px;
           text-shadow: 0 0 10px rgba(var(--c-gold-rgb), 0.45);
-        }
-
-        .chip-hint {
-          text-align: center;
-          font-size: 10.5px;
-          color: var(--c-muted);
-          margin: 0 0 11px;
-          letter-spacing: 0.3px;
         }
 
         .experience-tracker-title {
@@ -1327,16 +1317,24 @@ END:VCARD`;
           letter-spacing: 3px;
           color: var(--c-gold-light);
           text-transform: uppercase;
-          margin: 0 0 11px;
+          margin: 0 0 8px;
         }
 
         .floating-pills-cloud {
           display: flex;
           flex-wrap: wrap;
           justify-content: center;
-          gap: 7px 6px;
-          margin: 0 auto 10px;
+          gap: 6px 5px;
+          margin: 0 auto 7px;
           width: 100%;
+        }
+
+        .chip-hint {
+          text-align: center;
+          font-size: 10.5px;
+          color: var(--c-muted);
+          margin: 0 0 8px;
+          letter-spacing: 0.3px;
         }
 
         /* =========================================
@@ -1346,8 +1344,8 @@ END:VCARD`;
         .embossed-pill {
           position: relative;
           border-radius: 999px;
-          padding: 6px 12px;
-          font-size: 11px;
+          padding: 4.5px 10.5px;
+          font-size: 10.5px;
           line-height: 1.4;
           letter-spacing: 0.2px;
 
@@ -1428,9 +1426,9 @@ END:VCARD`;
           background: linear-gradient(145deg, #1d1810, #110e09);
 
           border-radius: 999px;
-          padding: 4px;
+          padding: 3px;
           gap: 3px;
-          margin: 0 auto 16px;
+          margin: 0 auto 12px;
 
           box-shadow:
             0 5px 12px rgba(var(--c-shadow-rgb), 0.5),
@@ -1441,11 +1439,11 @@ END:VCARD`;
 
         .capsule-lang-btn {
           position: relative;
-          padding: 6px 19px;
+          padding: 5px 18px;
           border-radius: 999px;
           border: 1px solid transparent;
           background: transparent;
-          font-size: 10px;
+          font-size: 9.5px;
           font-weight: 700;
           letter-spacing: 0.8px;
           color: var(--c-muted);
@@ -1493,7 +1491,7 @@ END:VCARD`;
               rgba(var(--c-surface-rgb), 0.97) 100%
             );
           border-radius: 24px;
-          padding: 16px 16px 14px;
+          padding: 12px 15px 10px;
           box-sizing: border-box;
 
           box-shadow:
@@ -1507,7 +1505,6 @@ END:VCARD`;
           border: 1px solid var(--c-border);
           border-top: 3px solid var(--c-gold);
 
-          /* Inner hairline frame for a luxury double-border look */
           outline: 1px solid rgba(var(--c-gold-rgb), 0.14);
           outline-offset: -7px;
 
@@ -1518,7 +1515,7 @@ END:VCARD`;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 8px;
+          margin-bottom: 4px;
         }
 
         .label-badge {
@@ -1597,11 +1594,11 @@ END:VCARD`;
 
         /* Is height se review box ki lambai control hoti hai */
         .review-display-zone {
-          min-height: 128px;
+          min-height: 92px;
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 4px 2px 6px;
+          padding: 2px 2px 2px;
         }
 
         .loader-shimmer-wrap {
@@ -1644,8 +1641,8 @@ END:VCARD`;
 
         .review-body-text {
           font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
-          font-size: 13.5px;
-          line-height: 1.6;
+          font-size: 13px;
+          line-height: 1.55;
           color: var(--c-text);
           margin: 0;
           width: 100%;
@@ -1685,7 +1682,8 @@ END:VCARD`;
           text-align: center;
           color: var(--c-gold);
           font-size: 7px;
-          margin: 6px 0 10px;
+          line-height: 1;
+          margin: 3px 0 7px;
         }
 
         /* =========================================
@@ -1697,7 +1695,7 @@ END:VCARD`;
           overflow: hidden;
 
           width: 100%;
-          height: 48px;
+          height: 44px;
           border-radius: 999px;
 
           background: linear-gradient(
@@ -1759,7 +1757,7 @@ END:VCARD`;
           font-size: 9.5px;
           color: var(--c-muted);
           text-align: center;
-          margin: 9px 0 0;
+          margin: 7px 0 0;
           font-style: italic;
         }
 
@@ -2063,7 +2061,6 @@ END:VCARD`;
 
         /* =========================================
            DIRECT CALL TO SALON - SLIM PREMIUM BUTTON
-           Gold plate with shine sweep and ringing icon
            ========================================= */
 
         .direct-call-btn {
@@ -2110,7 +2107,6 @@ END:VCARD`;
             box-shadow 0.18s ease;
         }
 
-        /* Upar ki glossy highlight */
         .direct-call-btn::before {
           content: "";
           position: absolute;
@@ -2128,7 +2124,6 @@ END:VCARD`;
           z-index: 1;
         }
 
-        /* Soft shining sweep effect */
         .direct-call-shine {
           position: absolute;
           top: -20%;
@@ -2255,7 +2250,6 @@ END:VCARD`;
           isolation: isolate;
         }
 
-        /* Poore gallery card par halka gold shine sweep */
         .gallery-section-shine {
           position: absolute;
           top: -10%;
@@ -2358,12 +2352,6 @@ END:VCARD`;
           box-sizing: border-box;
         }
 
-        /*
-          All photos use the same 4:3 frame.
-          object-fit: contain keeps the complete image visible.
-          Portrait and landscape images will not be cropped.
-        */
-
         .gallery-image-frame {
           position: relative;
           width: 100%;
@@ -2389,7 +2377,6 @@ END:VCARD`;
           -webkit-user-drag: none;
         }
 
-        /* Har slide par gold shining sweep */
         .gallery-frame-shine {
           position: absolute;
           top: -20%;
@@ -2413,7 +2400,6 @@ END:VCARD`;
           55%, 100% { left: 135%; }
         }
 
-        /* Placeholder slide (jab tak photos nahi aati) */
         .gallery-placeholder {
           position: absolute;
           inset: 0;
@@ -2464,8 +2450,6 @@ END:VCARD`;
           letter-spacing: 0.6px;
           color: var(--c-muted);
         }
-
-        /* Subtle previous / next controls */
 
         .gallery-arrow {
           position: absolute;
@@ -2708,6 +2692,90 @@ END:VCARD`;
         }
 
         /* =========================================
+           CHHOTE / KAM HEIGHT WALE PHONES
+           Taaki review box ka button wahan bhi pehli screen mein dikhe
+           ========================================= */
+
+        @media (max-height: 780px) {
+          .soft-luxury-viewport {
+            padding-top: 8px;
+          }
+
+          .logo-circle-container {
+            width: 64px;
+            height: 64px;
+          }
+
+          .logo-ring {
+            margin-bottom: 6px;
+          }
+
+          .brand-main-title {
+            font-size: 14.5px;
+            margin-bottom: 2px;
+          }
+
+          .brand-serif-subtitle {
+            font-size: 10.5px;
+          }
+
+          .royal-shahi-divider {
+            margin: 3px auto 4px;
+          }
+
+          .experience-tracker-title {
+            margin-bottom: 6px;
+          }
+
+          .floating-pills-cloud {
+            gap: 5px 4px;
+            margin-bottom: 5px;
+          }
+
+          .embossed-pill {
+            padding: 3.5px 9px;
+            font-size: 10px;
+          }
+
+          .chip-hint {
+            margin-bottom: 6px;
+          }
+
+          .capsule-lang-dock {
+            margin-bottom: 9px;
+          }
+
+          .review-display-zone {
+            min-height: 80px;
+          }
+
+          .review-body-text {
+            font-size: 12.5px;
+            line-height: 1.5;
+          }
+
+          .full-luxury-copy-btn {
+            height: 42px;
+          }
+        }
+
+        @media (max-height: 680px) {
+          .stars-cluster,
+          .chip-hint {
+            display: none;
+          }
+
+          .logo-circle-container {
+            width: 52px;
+            height: 52px;
+          }
+
+          .review-display-zone {
+            min-height: 70px;
+          }
+        }
+
+        /* =========================================
            RESPONSIVE GALLERY
            ========================================= */
 
@@ -2734,7 +2802,7 @@ END:VCARD`;
           }
 
           .brand-main-title {
-            font-size: 14.5px;
+            font-size: 14px;
             letter-spacing: 2px;
           }
         }
