@@ -59,7 +59,7 @@ const CLIENT_CONFIG = {
   logoUrl: "/logo.png",
 
   // TODO: Asli Google review link yahan daalo (Copy & Paste on Google button isi par khulta hai)
-  googleReviewUrl: "https://www.justdial.com/Pathankot/The-Lounge-Unisex-Salon-Near-Bedi-Petrol-Pump-Pathankot-Junction/9999PX186-X186-250821125144-S4C7_BZDET/writereview?fromFlow=1&ratingPresent=1&rate=1&defFid=1669890460968692&fromRevCta=1&scrollToTags=1",
+  googleReviewUrl: "https://www.justdial.com/Pathankot/The-Lounge-Unisex-Salon-Near-Bedi-Petrol-Pump-Pathankot-Junction/9999PX186-X186-250821125144-S4C7_BZDET/writereview?fromFlow=1&ratingPresent=1&rate=5&defFid=1669890460968692&fromRevCta=1&scrollToTags=1",
 
   mapSearch: "The Lounge Unisex Salon, Pathankot Junction, Pathankot, Punjab",
   // Asli Google Maps share link mil jaye toh yahan replace kar sakte ho.
