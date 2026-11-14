@@ -79,7 +79,7 @@ const CLIENT_CONFIG = {
 
   // Jis link ki value khali hai, uska button page par nahi dikhega.
   // Asli link aane par bas yahan daal do, button apne aap aa jayega.
-  instagramUrl: "",
+  instagramUrl: "https://www.instagram.com/theloungeunisexsalon?mdxt=eWNjNXVtZTVwaDVy",
   facebookUrl: "",
   websiteUrl: "",
   youtubeUrl: "",
