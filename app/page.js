@@ -234,6 +234,15 @@ export default function UniversalReviewPage() {
   useEffect(() => {
     setMounted(true);
 
+    // Refresh par browser purani scroll position / anchoring se page ko
+    // thoda khisaka deta tha. Page hamesha top se, ek hi jagah par shuru hoga.
+    try {
+      if ("scrollRestoration" in window.history) {
+        window.history.scrollRestoration = "manual";
+      }
+      window.scrollTo(0, 0);
+    } catch (e) {}
+
     // Styles lagne ke baad hi page dikhao (2 frame ruk kar), taaki refresh par
     // bina-style / toota hua structure kabhi na dikhe.
     let raf2;
@@ -589,7 +598,8 @@ END:VCARD`;
             })}
           </div>
 
-        {/* Review Box */}
+        {/* Review Box (fixed slot: box neeche ki taraf badhe toh baaki page na hile) */}
+        <div className="review-slot">
         <div className="signature-review-box">
 
           <div className="box-top-ribbon">
@@ -654,6 +664,7 @@ END:VCARD`;
           <p className="card-disclaimer-note">
             Please review the wording before posting.
           </p>
+        </div>
         </div>
 
         </div>
@@ -1161,6 +1172,7 @@ END:VCARD`;
           background: var(--c-page) !important;
           min-height: 100% !important;
           overflow-x: hidden !important;
+          overflow-anchor: none;
         }
 
         /* =========================================
@@ -1235,8 +1247,8 @@ END:VCARD`;
         .hero-screen {
           width: 100%;
           box-sizing: border-box;
-          min-height: calc(100vh - 56px);
-          min-height: calc(100svh - 56px);
+          min-height: calc(100vh - 24px);
+          min-height: calc(100svh - 24px);
           padding-bottom: 0;
           margin-bottom: 16px;
           display: flex;
@@ -1274,6 +1286,13 @@ END:VCARD`;
           flex-direction: column;
           align-items: center;
           gap: 7px;
+        }
+
+        /* Review box ke liye fixed jagah: text badhne par box neeche ki taraf
+           isi jagah mein failta hai, upar ka ya neeche ka page nahi hilta */
+        .review-slot {
+          width: 100%;
+          min-height: 246px;
         }
 
         .hero-screen .signature-review-box {
@@ -2837,6 +2856,10 @@ END:VCARD`;
 
           .review-display-zone {
             min-height: 72px;
+          }
+
+          .review-slot {
+            min-height: 232px;
           }
 
           .full-luxury-copy-btn {
