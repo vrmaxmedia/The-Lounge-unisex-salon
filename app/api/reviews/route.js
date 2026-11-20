@@ -5,25 +5,21 @@ export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
 
 /* =====================================================================
-   SETTINGS (same generation engine settings as the reference route)
+   SETTINGS (Cost Optimized, Fast & Hard-Locked Model)
    ===================================================================== */
-const MODEL = process.env.GEMINI_MODEL || 'gemini-3.5-flash';
-const PARALLEL_CALLS = 2;
-const MAX_ROUNDS = 2;
-const CALL_TIMEOUT_MS = 12000;
-const MAX_OUTPUT_TOKENS = 300;
-const HISTORY_SIZE = 60;
+const MODEL = 'gemini-3.5-flash-lite'; // Hard-locked: sabse fast aur sasta model
+const MAX_ROUNDS = 2;                   // 1 single call; fail hone par sirf 1 retry round
+const CALL_TIMEOUT_MS = 12000;          // 12 second timeout
+const MAX_OUTPUT_TOKENS = 480;          // 2 to 8 lines ke liye exact token cap
+const HISTORY_SIZE = 120;               // Server memory: pichhle 120 reviews track honge
+const RECENT_WINDOW = 25;               // Lagatar 25-50 reviews me pattern repeat nahi hoga
 
 /* =====================================================================
-   BUSINESS PACK (The Lounge Unisex Salon, Pathankot Junction, Pathankot)
-   Business-specific settings live here; the engine below is reusable.
-   Services listed on the public business listing: hair styling, hair
-   cut, hair colour, hair straightening, blow dry, hair curling, hair
-   rebonding, beard styling / shaving / trimming, waxing, bridal makeup.
-   No prices, offers, packages or years of experience are invented.
+   BUSINESS PACK  (Client: The Lounge Unisex Salon, Pathankot Junction, Pathankot)
    ===================================================================== */
 const OWNER_NAME = process.env.OWNER_NAME || 'the salon team';
 
+// Local SEO Keywords (Har review me ek alag keyword naturally inject hoga)
 const SEO_KEYWORDS = [
   'unisex salon in Pathankot',
   'The Lounge Unisex Salon Pathankot',
@@ -39,6 +35,13 @@ const SEO_KEYWORDS = [
   'best salon in Pathankot Junction',
   'salon in Pathankot Punjab',
   'haircut in Pathankot',
+];
+
+const KEYWORD_PLACEMENTS = [
+  'in the first half of the review (never as the very first words)',
+  'somewhere naturally in the middle of the review',
+  'near the end of the review',
+  'wherever it blends most naturally into a sentence',
 ];
 
 // Topics used when a visitor selects "All" or no specific chip.
@@ -156,22 +159,22 @@ const ALL_TOPICS = [
   'professionalism',
 ];
 
-// Voice profiles describe writing tone, not facts about the customer.
+// Socio-Economic Class Matrix (Upper, Middle, Mass diversity — non-hallucinating voice profiles)
 const PERSONAS = [
-  { id: 'simple', text: 'a straightforward local customer from Pathankot, uses simple everyday words and short natural sentences' },
-  { id: 'professional', text: 'a working professional, clear and composed, with a natural and polished but not promotional tone' },
-  { id: 'young', text: 'a young adult, casual and conversational, like an ordinary WhatsApp-style review' },
-  { id: 'practical', text: 'a practical customer, thoughtful and measured, focused on the actual service experience' },
-  { id: 'blunt', text: 'a direct no-nonsense customer who says only what mattered' },
-  { id: 'warm', text: 'a warm and appreciative customer, friendly but not exaggerated' },
-  { id: 'detailed', text: 'an observant customer who naturally mentions one or two specific details they personally noticed' },
-  { id: 'reserved', text: 'a quiet customer who writes a short, understated review without big claims' },
-  { id: 'firstvisit', text: 'a customer describing a first visit only if the wording does not invent any specific event' },
-  { id: 'regular', text: 'a familiar local customer tone, but do not claim repeat visits unless the customer supplied that fact' },
-  { id: 'budget', text: 'a practical customer who may care about value, but does not invent prices or discounts' },
-  { id: 'styleaware', text: 'a style-conscious customer who notices presentation and finishing, without exaggeration' },
-  { id: 'concise', text: 'a customer who writes casually and briefly, with no unnecessary explanation' },
-  { id: 'traveller', text: 'a customer who found the salon near the junction area and writes plainly about the visit, without inventing travel details' },
+  { id: 'simple', cls: 'mass', text: 'a straightforward local customer from Pathankot, uses simple everyday words and short natural sentences' },
+  { id: 'professional', cls: 'upper', text: 'a working professional, clear and composed, with a natural and polished but not promotional tone' },
+  { id: 'young', cls: 'mass', text: 'a young adult, casual and conversational, like an ordinary WhatsApp-style review' },
+  { id: 'practical', cls: 'middle', text: 'a practical customer, thoughtful and measured, focused on the actual service experience' },
+  { id: 'blunt', cls: 'mass', text: 'a direct no-nonsense customer who says only what mattered' },
+  { id: 'warm', cls: 'middle', text: 'a warm and appreciative customer, friendly but not exaggerated' },
+  { id: 'detailed', cls: 'upper', text: 'an observant customer who naturally mentions one or two specific details they personally noticed' },
+  { id: 'reserved', cls: 'mass', text: 'a quiet customer who writes a short, understated review without big claims' },
+  { id: 'firstvisit', cls: 'middle', text: 'a customer describing a visit naturally without inventing any specific occasion' },
+  { id: 'regular', cls: 'middle', text: 'a familiar local customer tone, without claiming repeat visits unless supplied' },
+  { id: 'budget', cls: 'middle', text: 'a practical customer who cares about fair value, without inventing prices or discounts' },
+  { id: 'styleaware', cls: 'upper', text: 'a style-conscious customer who notices presentation and finishing, without exaggeration' },
+  { id: 'concise', cls: 'mass', text: 'a customer who writes casually and briefly, with no unnecessary explanation' },
+  { id: 'traveller', cls: 'middle', text: 'a customer who found the salon near the Pathankot Junction area and writes plainly about the visit, without inventing travel details' },
 ];
 
 const WRITING_STYLES = [
@@ -189,7 +192,7 @@ const HINGLISH_LEVELS = [
 
 const OPENERS = [
   'start with the service or experience',
-  'start with the salon or its location',
+  'start with the salon or its Pathankot Junction location',
   'start with the staff or interaction',
   'start with a simple personal verdict',
   'start with how the visit felt',
@@ -202,6 +205,16 @@ const OPENERS = [
   'start naturally without a promotional introduction',
 ];
 
+// Middle-Part Story Diversity: beech ka flow har review me alag rahe
+const MIDDLE_FLOWS = [
+  'describe how neatly set up, well-lit and comfortable the salon interior felt during the visit',
+  'mention how patiently the staff listened to what was requested and explained things clearly without rushing',
+  'highlight the cleanliness, hygiene and calm atmosphere noticed inside the salon',
+  'share a quick contrast: wanted a straightforward, no-fuss service near the junction and felt completely at ease here',
+  'focus on practical value: the care and attention given during the service felt genuinely worth the money',
+  'talk about how easy it was to reach the salon near Pathankot Junction and how smoothly everything went',
+];
+
 const ENDINGS = [
   'end with a small thank-you',
   'end by saying the visitor may consider coming again, without making an exaggerated promise',
@@ -210,27 +223,25 @@ const ENDINGS = [
   'stop naturally after the last point, without a wrap-up line',
 ];
 
+// 2 crisp tone samples per language (input tokens bachane ke liye concise rakha hai)
 const EXAMPLES = {
   ENGLISH: [
-    'Visited The Lounge and found the place neatly set up, the overall experience felt comfortable and simple',
+    'Visited The Lounge and found the place neatly set up, the overall experience felt comfortable and simple.',
     'The staff listened properly to what I wanted and explained things clearly, that mattered most to me',
-    'Easy to find near the junction, the visit was pleasant and the interior had a nice feel',
-    'I liked how the service was handled, everything was done calmly and without any rush',
   ],
   HINGLISH: [
-    'salon ka setup achha laga, staff ne dhang se baat ki aur experience comfortable raha',
+    'salon ka setup achha laga, staff ne dhang se baat ki aur experience comfortable raha.',
     'junction ke paas easily mil gaya, overall visit sahi raha aur jagah bhi achhi lagi',
-    'jo service li thi usme dhyan diya, baat bhi properly samjhayi aur kaam aaram se kiya',
-    'simple aur comfortable experience raha, faltu baatein nahi hui aur staff ka behaviour bhi theek tha',
   ],
 };
 
 /* =====================================================================
-   ENGINE (shared review-generation strategy)
+   ENGINE  (Locked Core Engine)
    ===================================================================== */
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const chance = (p) => Math.random() < p;
 const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
+const countWords = (t) => t.split(/\s+/).filter(Boolean).length;
 
 function pickWeighted(items) {
   const total = items.reduce((s, i) => s + i.w, 0);
@@ -241,65 +252,69 @@ function pickWeighted(items) {
   return items[0];
 }
 
-// ~8 words = 1 line on a phone screen. Distribution retained from reference.
+/* ---- 60-20-20 Weighted Random Length System (2 to 8 Lines) ----
+   - 20% Short  (2 to 3 lines) -> w: 10 + 10 = 20
+   - 60% Medium (4 to 5 lines) -> w: 32 + 28 = 60
+   - 20% Long   (6 to 8 lines) -> w: 9 + 7 + 4 = 20
+   Pichhle 2 reviews ki exact line count repeat nahi hogi. */
 const LENGTHS = [
-  { w: 12, lines: 1, min: 7, max: 11, rule: 'ONE short line, 7 to 10 words' },
-  { w: 16, lines: 2, min: 13, max: 21, rule: 'TWO lines, 14 to 20 words' },
-  { w: 30, lines: 3, min: 21, max: 31, rule: 'THREE lines, 22 to 30 words' },
-  { w: 28, lines: 4, min: 30, max: 42, rule: 'FOUR lines, 32 to 40 words' },
-  { w: 14, lines: 5, min: 40, max: 52, rule: 'FIVE lines, 42 to 50 words' },
+  { w: 10, lines: 2, min: 13, max: 21, rule: 'TWO lines, about 14 to 20 words' },
+  { w: 10, lines: 3, min: 21, max: 31, rule: 'THREE lines, about 22 to 30 words' },
+  { w: 32, lines: 4, min: 30, max: 42, rule: 'FOUR lines, about 32 to 40 words' },
+  { w: 28, lines: 5, min: 40, max: 54, rule: 'FIVE lines, about 42 to 52 words' },
+  { w: 9,  lines: 6, min: 50, max: 66, rule: 'SIX lines, about 52 to 64 words' },
+  { w: 7,  lines: 7, min: 58, max: 78, rule: 'SEVEN lines, about 60 to 75 words' },
+  { w: 4,  lines: 8, min: 66, max: 90, rule: 'EIGHT lines, about 68 to 86 words' },
 ];
 
-function chooseLength(recent, minLines = 1) {
-  const lens = recent.map((r) => r.lines).filter(Boolean);
-  const l1 = lens[lens.length - 1];
-  const l2 = lens[lens.length - 2];
-  const l3 = lens[lens.length - 3];
+function chooseLength(recent, minLines = 2) {
+  const lastTwo = recent.map((r) => r.lines).filter(Boolean).slice(-2);
   let pool = LENGTHS.filter((x) => x.lines >= minLines);
 
-  const mid = (n) => n === 3 || n === 4;
-  if (lens.length >= 3 && mid(l1) && mid(l2) && mid(l3)) {
-    const f = pool.filter((x) => !mid(x.lines));
-    if (f.length) pool = f;
-  } else if (l1 && !mid(l1)) {
-    const f = pool.filter((x) => mid(x.lines));
-    if (f.length) pool = f;
-  }
-  if (l1 && l1 === l2) {
-    const f = pool.filter((x) => x.lines !== l1);
-    if (f.length) pool = f;
-  }
+  const fresh = pool.filter((x) => !lastTwo.includes(x.lines));
+  if (fresh.length) pool = fresh;
+
   return pickWeighted(pool);
 }
 
 function choosePersona(recent) {
-  const last = recent.map((r) => r.voice).filter(Boolean).slice(-4);
-  const pool = PERSONAS.filter((v) => !last.includes(v.id));
+  const lastVoices = recent.map((r) => r.voice).filter(Boolean).slice(-10);
+  const lastClass = recent.map((r) => r.cls).filter(Boolean).slice(-2);
+
+  let pool = PERSONAS.filter((v) => !lastVoices.includes(v.id));
+  if (lastClass.length === 2 && lastClass[0] === lastClass[1]) {
+    const diffClass = pool.filter((v) => v.cls !== lastClass[1]);
+    if (diffClass.length) pool = diffClass;
+  }
   return pick(pool.length ? pool : PERSONAS);
 }
 
 function chooseTopic(recent) {
-  const last = recent.map((r) => r.topic).filter(Boolean).slice(-2);
+  const last = recent.map((r) => r.topic).filter(Boolean).slice(-6);
   const pool = ALL_TOPICS.filter((t) => !last.includes(t));
   return TOPICS[pick(pool.length ? pool : ALL_TOPICS)];
 }
 
-// Customer ke selected chips (maximum 3) ko map karo.
+// Customer ke selected chips ("All" ko chhod kar max 3) random order me shuffle karke lo
 function chosenChips(body) {
   const labels = Array.isArray(body.selectedChips) ? body.selectedChips : [];
-  return labels
-    .filter((l) => typeof l === 'string' && l !== 'All' && CHIPS[l])
-    .slice(0, 3)
-    .map((l) => ({ label: l, ...CHIPS[l] }));
+  const valid = labels.filter((l) => typeof l === 'string' && l !== 'All' && CHIPS[l]).slice(0, 3);
+  return shuffle(valid).map((l) => ({ label: l, ...CHIPS[l] }));
 }
 
-function chooseFrom(list, key, recent, n = 3) {
-  const last = recent
-    .map((r) => r[key])
-    .filter((v) => v !== undefined && v !== null)
-    .slice(-n);
+function chooseFrom(list, key, recent, n = 8) {
+  const last = recent.map((r) => r[key]).filter((v) => v !== undefined && v !== null).slice(-n);
   const pool = list.filter((x) => !last.includes(x));
   return pick(pool.length ? pool : list);
+}
+
+const SERVER_KWS = [];
+
+function chooseKeyword(recent) {
+  let used = recent.map((r) => r.seo).filter(Boolean).slice(-12);
+  if (!used.length) used = SERVER_KWS.slice(-12);
+  const pool = SEO_KEYWORDS.filter((k) => !used.includes(k));
+  return pick(pool.length ? pool : SEO_KEYWORDS);
 }
 
 const BANNED_OPENINGS = [
@@ -323,15 +338,24 @@ const HINDI_WORDS = new Set([
   'rahe', 'rahi', 'laga', 'lagi', 'bilkul', 'ekdum', 'sab', 'kuch', 'koi', 'phir', 'fir', 'bhi', 'toh', 'lekin',
   'isliye', 'abhi', 'dekh', 'dekha', 'diya', 'dikhaya', 'samjhaya', 'sahi', 'dukaan', 'dukan', 'aap', 'aapne',
   'paise', 'kam', 'jyada', 'zyada', 'badhiya', 'mast', 'yaar', 'mein', 'yeh', 'ye', 'woh', 'wo', 'ne', 'hu', 'hun', 'tak', 'wahan', 'sabse',
-  'achhi', 'jagah', 'kaam', 'karwaya', 'karaya', 'dhyan', 'aaram', 'baat', 'theek', 'raha', 'gaye', 'liye', 'wali', 'dhang', 'sunke', 'suna',
+  'achhi', 'jagah', 'kaam', 'karwaya', 'karaya', 'dhyan', 'aaram', 'baat', 'theek', 'gaye', 'liye', 'wali', 'dhang', 'sunke', 'suna',
 ]);
 
-/* ------------------ memory (server par, best-effort) ------------------ */
-const HISTORY = []; // { open, ws }
-const HITS = new Map(); // ip -> [timestamps]
+const KW_STOP_WORDS = new Set(['salon', 'unisex', 'lounge', 'in', 'pathankot', 'junction', 'punjab', 'best', 'near', 'and', 'for', 'beauty', 'parlour']);
+
+/* ------------------ Memory & 50-Review Anti-Repetition ------------------ */
+const HISTORY = [];
+const HITS = new Map();
 
 const openingOf = (text) => text.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/).filter(Boolean).slice(0, 3).join(' ');
-const wordSet = (t) => new Set(t.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter((w) => w.length > 2));
+const wordSet = (t) =>
+  new Set(
+    t
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g, ' ')
+      .split(/\s+/)
+      .filter((w) => w.length > 2 && !KW_STOP_WORDS.has(w))
+  );
 
 function tooSimilar(text, recentOpenings) {
   const open = openingOf(text);
@@ -339,10 +363,11 @@ function tooSimilar(text, recentOpenings) {
   const ws = wordSet(text);
   for (const h of HISTORY) {
     if (h.open === open) return true;
+    if (ws.size < 7 || h.ws.size < 7) continue;
     let inter = 0;
     for (const w of ws) if (h.ws.has(w)) inter++;
     const union = ws.size + h.ws.size - inter || 1;
-    if (inter / union > 0.45) return true;
+    if (inter / union > 0.36) return true; // Strict 36% similarity limit across last 120 reviews
   }
   return false;
 }
@@ -361,31 +386,107 @@ function rateLimited(request) {
   if (HITS.size > 2000) {
     for (const [k, v] of HITS) if (!v.some((t) => now - t < 5 * 60 * 1000)) HITS.delete(k);
   }
-  return arr.length > 25;
+  return arr.length > 35;
 }
 
-/* ------------------ cleaning and validation ------------------ */
-function cleanReview(text) {
-  return text
+/* ------------------ Auto-Repair & Cleaning Pipeline ------------------ */
+function scrubRobotic(text) {
+  const startedUpper = /^[A-Z]/.test(text);
+  let t = text
+    .replace(/\s*[—–]\s*/g, ', ')
+    .replace(/\btruly\s+/gi, '')
+    .replace(/\bseamless(ly)?\b/gi, (m, ly) => (ly ? 'smoothly' : 'smooth'))
+    .replace(/\bhassle[- ]free\b/gi, 'easy')
+    .replace(/\btop[- ]notch\b/gi, 'very good')
+    .replace(/\bexceptional(ly)?\b/gi, (m, ly) => (ly ? 'very' : 'very good'))
+    .replace(/\bimpeccabl(e|y)\b/gi, (m, e) => (e === 'y' ? 'very well' : 'very good'))
+    .replace(/\bcommendable\b/gi, 'good')
+    .replace(/\bunparalleled\b/gi, 'very good')
+    .replace(/\bgo-to\b/gi, 'favourite')
+    .replace(/\bgame[- ]changer\b/gi, 'big plus')
+    .replace(/\bone[- ]stop\b/gi, 'complete')
+    .replace(/\bmust[- ]visit\b/gi, 'worth visiting')
+    .replace(/\bhighly recommended\b/gi, 'recommended')
+    .replace(/\bhands down,?\s*/gi, '')
+    .replace(/\bdelighted\b/gi, 'happy')
+    .replace(/\bkudos( to)?\b/gi, (m, to) => (to ? 'thanks to' : 'thanks'));
+  t = t.replace(/\s{2,}/g, ' ').replace(/\s+([.,])/g, '$1').trim();
+  if (startedUpper && /^[a-z]/.test(t)) t = t[0].toUpperCase() + t.slice(1);
+  return t;
+}
+
+function cleanReview(text, useFullStop) {
+  let t = text
+    .replace(/[*#]/g, '')
     .replace(/^['"`\s]+|['"`\s]+$/g, '')
     .replace(/\s*\n+\s*/g, ' ')
-    .replace(/\s{2,}/g, ' ')
-    .replace(/\.{2,}/g, ' ')
-    .replace(/\.\s+/g, ', ')
-    .replace(/\.+$/g, '')
+    .replace(/[—–]/g, ', ');
+
+  if (useFullStop) {
+    t = t
+      .replace(/!+/g, '.')
+      .replace(/\.{2,}|…/g, '.')
+      .replace(/\s+([.,])/g, '$1')
+      .replace(/\.(?=[A-Za-z])/g, '. ')
+      .replace(/\.\s*\./g, '.')
+      .replace(/,\s*\./g, '.');
+  } else {
+    t = t
+      .replace(/!+/g, ',')
+      .replace(/\.{2,}|…/g, ' ')
+      .replace(/\.\s+/g, ', ')
+      .replace(/\.+$/g, '');
+  }
+
+  return t
     .replace(/,\s*,/g, ',')
+    .replace(/\s{2,}/g, ' ')
     .trim();
 }
 
 function fixCutOff(text) {
   let parts = text.trim().replace(/[,-\s]+$/g, '').split(/\s+/);
-  while (parts.length > 6) {
+  while (parts.length > 5) {
     const last = parts[parts.length - 1].toLowerCase().replace(/[^a-z]/g, '');
     if (!DANGLING.has(last)) break;
     parts.pop();
     parts = parts.join(' ').replace(/[,-\s]+$/g, '').split(/\s+/);
   }
   return parts.join(' ');
+}
+
+function trimToLimit(text, maxWords, stillOk) {
+  const m = text.match(/^([\s\S]*?)([\s\uFE0F\u200D\p{Extended_Pictographic}]*)$/u);
+  const core = m ? m[1].trim() : text;
+  const tail = m ? m[2].trim() : '';
+  const sentences = core.split(/(?<=[.,])\s+/).filter(Boolean);
+
+  while (countWords(sentences.join(' ')) > maxWords && sentences.length > 2) {
+    let removed = false;
+    for (let i = sentences.length - 1; i >= 1; i--) {
+      const test = sentences.filter((_, j) => j !== i).join(' ');
+      if (!stillOk(test)) continue;
+      sentences.splice(i, 1);
+      removed = true;
+      break;
+    }
+    if (!removed) break;
+  }
+  const out = sentences.join(' ');
+  return tail ? `${out} ${tail}` : out;
+}
+
+function finalizeReview(text, useFullStop) {
+  const m = text.match(/^([\s\S]*?)([\s\p{Extended_Pictographic}\uFE0F\u200D]*)$/u);
+  let core = (m ? m[1] : text).replace(/[,;:\-\s]+$/g, '').trim();
+  const tail = (m ? m[2] : '').replace(/\s+/g, '');
+
+  if (useFullStop) {
+    if (!/\.$/.test(core)) core += '.';
+  } else {
+    core = core.replace(/\.+$/g, '').trim();
+  }
+  return tail ? `${core} ${tail}` : core;
 }
 
 function looksCutOff(text) {
@@ -399,7 +500,7 @@ function hindiCount(text) {
 
 function languageOk(text, language, words) {
   const h = hindiCount(text);
-  if (language === 'HINGLISH') return h >= Math.max(3, Math.floor(words * 0.2));
+  if (language === 'HINGLISH') return h >= Math.max(2, Math.floor(words * 0.18));
   return h <= 2;
 }
 
@@ -408,7 +509,7 @@ function startsBanned(text) {
   return BANNED_OPENINGS.some((b) => t.startsWith(b.toLowerCase()));
 }
 
-/* ------------------ Gemini prompt builder ------------------ */
+/* ------------------ Compressed Prompt Builder ------------------ */
 function buildPrompt(body, recent) {
   const language = body.language === 'HINGLISH' ? 'HINGLISH' : 'ENGLISH';
   const businessName = String(body.businessName || 'The Lounge Unisex Salon').slice(0, 120);
@@ -421,38 +522,55 @@ function buildPrompt(body, recent) {
   const suppliedInstruction = String(body.customInstruction || '').slice(0, 500);
 
   const chips = chosenChips(body);
-  const minLines = chips.length >= 3 ? 4 : chips.length === 2 ? 3 : 1;
+  const minLines = chips.length >= 3 ? 4 : 2;
   const length = chooseLength(recent, minLines);
   const persona = choosePersona(recent);
-  const topic = chips.length
+
+  const primaryTopic = chips.length
     ? { id: chips[0].id, text: chips[0].text, must: chips[0].must }
     : chooseTopic(recent);
   const extraChips = chips.slice(1);
-  const opener = chooseFrom(OPENERS, 'opener', recent, 3);
-  const ending = chooseFrom(ENDINGS, 'ending', recent, 2);
-  const style = pick(WRITING_STYLES);
+
+  let bonusTopic = null;
+  if (!extraChips.length && length.lines >= 4 && chance(0.65)) {
+    const candidate = chooseTopic([...recent, { topic: primaryTopic.id }]);
+    if (candidate.id !== primaryTopic.id) bonusTopic = candidate;
+  }
+
+  const opener = chooseFrom(OPENERS, 'opener', recent, 9);
+  const middleFlow = chooseFrom(MIDDLE_FLOWS, 'mid', recent, 5);
+  const ending = chooseFrom(ENDINGS, 'ending', recent, 5);
+
+  const hasSpellingSlip = chance(0.10); // 10% natural spelling slip
+  const style = hasSpellingSlip
+    ? 'casual WhatsApp typing with 1 or 2 natural human spelling slips (like real people typing fast on phone)'
+    : pick(WRITING_STYLES);
+  const useFullStop = chance(0.80); // 80% full stop, 20% without full stop
   const hinglishLevel = pick(HINGLISH_LEVELS);
 
-  const longEnough = length.lines >= 3;
-  const mentionName = chance(0.4);
-  const mentionStaff = topic.id === 'chip_staff' || topic.id === 'staff' ? chance(0.5) : chance(0.12);
+  const mentionName = length.lines >= 3 && chance(0.4);
+  const mentionStaff = length.lines >= 3 && (primaryTopic.id === 'chip_staff' || primaryTopic.id === 'staff' ? chance(0.5) : chance(0.12));
   const useEmoji = chance(0.06);
 
-  const recentSeo = recent.map((r) => r.seo).filter(Boolean).slice(-8);
-  const seoPool = SEO_KEYWORDS.filter((k) => !recentSeo.includes(k));
-  const seo = chance(0.25) ? pick(seoPool.length ? seoPool : SEO_KEYWORDS) : null;
+  // Mandatory unique SEO keyword in every review (rotated across last 12 reviews)
+  const seo = chooseKeyword(recent);
+  const kwPlacement = pick(KEYWORD_PLACEMENTS);
 
   const languageBlock = language === 'HINGLISH'
-    ? `LANGUAGE (MOST IMPORTANT): Write in HINGLISH = Hindi sentences typed in English/Roman letters, like a local Pathankot customer on WhatsApp. Level: ${hinglishLevel}. Grammar must be Hindi (hai, tha, kiya, mila, nahi, bahut, aur, ke liye, wala etc.). Service names and local keywords can stay in English. Never write a full English sentence. Never use Devanagari.`
-    : 'LANGUAGE (MOST IMPORTANT): Write in simple natural English like an Indian customer. Do not use Hindi words.';
+    ? `LANGUAGE: HINGLISH = Hindi sentences typed in Roman/English letters like a local Pathankot customer on WhatsApp. Level: ${hinglishLevel}. Hindi grammar (hai, tha, kiya, mila, nahi, bahut, aur, ke liye). Service/SEO words can stay in English. Never write a full English sentence. No Devanagari.`
+    : 'LANGUAGE: Simple natural Indian English. Do not use Hindi words.';
 
-  const examples = shuffle(EXAMPLES[language]).slice(0, 3).map((e) => `- ${e}`).join('\n');
+  const examples = shuffle(EXAMPLES[language]).map((e) => `- ${e}`).join('\n');
   const experienceBlock = suppliedExperience
     ? `CUSTOMER-SUPPLIED EXPERIENCE (highest priority; use only these facts): ${suppliedExperience}`
     : 'No detailed customer experience was supplied. Keep the draft limited to the selected topic/chips and broad visit impressions. Do not invent a specific treatment, package, occasion, result, product, staff member, price or repeat visit.';
   const customBlock = suppliedInstruction
     ? `ADDITIONAL BUSINESS GUIDANCE (must not override factual rules): ${suppliedInstruction}`
     : '';
+
+  const punctuationRule = useFullStop
+    ? `- FULL STOPS: End every sentence with a full stop (.) and end the review with a full stop (.). No exclamation marks or dashes.`
+    : `- NO FULL STOPS: Do NOT use a full stop (.) anywhere. Use commas, "aur"/"and", or natural flow.`;
 
   const prompt = `${languageBlock}
 
@@ -462,36 +580,33 @@ About: ${description}
 ${experienceBlock}
 ${customBlock}
 
-Tone samples from other customers (only for feel, never copy words or structure):
+Tone samples (feel only, never copy words/structure):
 ${examples}
 
 THIS REVIEW:
-- Main topic: ${topic.text}. The review must clearly be about this.
-${extraChips.length ? `- ALSO naturally cover these selected points (all of them): ${extraChips.map((c) => c.text).join('; ')}.` : '- Stick to the main topic only.'}
-- Writing style: ${style}.
+- Main topic: ${primaryTopic.text}.
+${extraChips.length ? `- ALSO cover these selected points: ${extraChips.map((c) => c.text).join('; ')}.` : bonusTopic ? `- Also weave in a short natural mention of ${bonusTopic.text}.` : '- Keep it focused on the main topic.'}
+- Style: ${style}.
 - Opening: ${opener}.
-${longEnough ? `- Ending: ${ending}.` : ''}
-- Length: ${length.rule}. Stay inside this range.
-${mentionName ? `- Mention the business name "${businessName}" once, naturally.` : '- Do not repeat the full business name.'}
-${seo ? `- If it fits naturally, include the phrase "${seo}" without making it sound like an advertisement.` : ''}
+${length.lines >= 4 ? `- Middle flow: ${middleFlow}.` : ''}
+${length.lines >= 3 ? `- Ending: ${ending}.` : ''}
+- Length: ${length.rule}. Stay strictly inside this word count.
+- SEO KEYWORD (MANDATORY): Naturally include the phrase "${seo}" ${kwPlacement} without making it sound like an ad.
+${mentionName ? `- Mention "${businessName}" once naturally.` : '- Do not repeat the full business name.'}
 ${mentionStaff ? `- You may mention ${OWNER_NAME} only as the salon team; do not invent a person's name.` : '- Do not name any person.'}
 ${useEmoji ? '- One emoji at the very end is allowed.' : '- No emojis.'}
 
-HARD RULES:
-- ONE single paragraph. No line breaks, bullets or title.
-- Do NOT use a full stop (.) anywhere. Use commas, "aur"/"and", or natural flow.
+RULES:
+- ONE single paragraph. No line breaks, bullets, or title.
+${punctuationRule}
 - Never start with: ${BANNED_OPENINGS.join(', ')}.
-- Sound like a real customer, not an advertisement. No hashtags, slogans, keyword stuffing, no dashes. Avoid polished marketing words (seamless, hassle-free, top-notch, exceptional).
+- Sound like a real human customer, not an ad. No hashtags, slogans, keyword stuffing, or heavy marketing words.
 - Never invent a service, treatment, product, package, price, discount, offer, appointment, result, event, staff name, years of experience, rating or repeat visit.
 - Do not claim bridal makeup, hair colour, straightening, rebonding, beard grooming or waxing unless the selected chip or customer-supplied experience specifically supports it.
-- Do not state that the salon is open now or mention business hours.
-- Do not make claims about medical, skin, hair-health or long-lasting outcomes.
-- End with a COMPLETE thought. Never stop mid-sentence.
-- Output only the review text.`
-    .replace(/\n{3,}/g, '\n\n')
-    .replace(/\n\n(- )/g, '\n$1');
+- Do not state that the salon is open now, mention business hours, or make medical/skin/hair-health/long-lasting outcome claims.
+- Complete thought only. Output ONLY the review text.`;
 
-  return { prompt, length, persona, topic, extraChips, opener, ending, seo, language };
+  return { prompt, length, persona, topic: primaryTopic, extraChips, opener, middleFlow, ending, seo, language, useFullStop };
 }
 
 async function callGemini(apiKey, payload, signal) {
@@ -508,10 +623,10 @@ async function callGemini(apiKey, payload, signal) {
   return { res, data };
 }
 
-/* ------------------ one attempt: generate + validate ------------------ */
-async function attempt(apiKey, body, recent, signal) {
+/* ------------------ Single-Shot Attempt + Auto-Repair ------------------ */
+async function attempt(apiKey, body, recent, signal, strict = true) {
   const built = buildPrompt(body, recent);
-  const { prompt, length, persona, topic, extraChips, opener, ending, seo, language } = built;
+  const { prompt, length, persona, topic, extraChips, opener, middleFlow, ending, seo, language, useFullStop } = built;
 
   const payload = {
     contents: [{ role: 'user', parts: [{ text: `Write the review for ${body.businessName || 'The Lounge Unisex Salon'} now.` }] }],
@@ -520,30 +635,42 @@ async function attempt(apiKey, body, recent, signal) {
       temperature: 1.0,
       topP: 0.95,
       maxOutputTokens: MAX_OUTPUT_TOKENS,
-      thinkingConfig: { thinkingBudget: 0 },
     },
   };
 
   try {
-    let { res, data } = await callGemini(apiKey, payload, signal);
-
-    if (!res.ok && /thinking/i.test(data?.error?.message || '')) {
-      delete payload.generationConfig.thinkingConfig;
-      ({ res, data } = await callGemini(apiKey, payload, signal));
-    }
+    const { res, data } = await callGemini(apiKey, payload, signal);
     if (!res.ok) return { ok: false, error: data?.error?.message || 'Gemini API request failed.' };
 
     const candidate = data.candidates?.[0];
     const parts = candidate?.content?.parts || [];
     const raw = parts.filter((p) => !p.thought).map((p) => p.text || '').join('');
-    const review = fixCutOff(cleanReview(raw));
-    const words = review.split(/\s+/).filter(Boolean).length;
+    const usage = data.usageMetadata;
 
-    if (!review) return { ok: false, error: 'Empty response from Gemini.' };
+    if (!raw.trim()) return { ok: false, error: 'Empty response from Gemini.' };
     if (candidate?.finishReason === 'MAX_TOKENS') return { ok: false, error: 'Response was cut off.' };
+
+    // Auto-repair pipeline (prevents wasteful Round 2 API calls)
+    let review = scrubRobotic(raw);
+    review = fixCutOff(cleanReview(review, useFullStop));
     if (looksCutOff(review)) return { ok: false, error: 'Review ended mid-sentence.' };
-    if (words > length.max + 8) return { ok: false, error: 'Review too long.' };
-    if (words < Math.floor(length.min * 0.75)) return { ok: false, error: 'Review too short.' };
+
+    const stillOk = (t) => topic.must.test(t) && extraChips.every((c) => c.must.test(t));
+
+    let words = countWords(review);
+    if (words > length.max + 5) {
+      review = trimToLimit(review, length.max + 3, stillOk);
+      words = countWords(review);
+    }
+
+    review = finalizeReview(review, useFullStop);
+    words = countWords(review);
+
+    const maxAllowed = length.max + (strict ? 8 : 16);
+    const minAllowed = Math.floor(length.min * (strict ? 0.72 : 0.60));
+
+    if (words > maxAllowed) return { ok: false, error: 'Review too long.' };
+    if (words < minAllowed) return { ok: false, error: 'Review too short.' };
     if (/[\u0900-\u097F]/.test(review)) return { ok: false, error: 'Devanagari used.' };
     if (AI_PHRASES.test(review)) return { ok: false, error: 'Robotic phrase used.' };
     if (startsBanned(review)) return { ok: false, error: 'Banned opening used.' };
@@ -557,38 +684,25 @@ async function attempt(apiKey, body, recent, signal) {
     return {
       ok: true,
       review,
+      usage,
       meta: {
         lines: length.lines,
         voice: persona.id,
+        cls: persona.cls,
         topic: topic.id,
         opener,
+        mid: middleFlow,
         ending,
-        seo: seo || null,
+        seo,
         open: openingOf(review),
       },
     };
   } catch (e) {
     return {
       ok: false,
-      error: e?.name === 'AbortError' ? 'aborted' : e?.message || 'Request failed.',
-      aborted: e?.name === 'AbortError',
+      error: e?.name === 'AbortError' ? 'Request timed out.' : e?.message || 'Request failed.',
     };
   }
-}
-
-// Jo pehle valid result de, wahi lo.
-function firstValid(tasks) {
-  return new Promise((resolve) => {
-    let pending = tasks.length;
-    let firstError = null;
-    for (const t of tasks) {
-      t.then((r) => {
-        if (r.ok) return resolve(r);
-        if (!r.aborted && !firstError) firstError = r.error;
-        if (--pending === 0) resolve({ ok: false, error: firstError || 'Failed to generate review draft.' });
-      });
-    }
-  });
 }
 
 export async function POST(request) {
@@ -608,26 +722,32 @@ export async function POST(request) {
 
     const recent = (Array.isArray(body.recentLengths) ? body.recentLengths : [])
       .filter((r) => r && typeof r === 'object')
-      .slice(-6);
+      .slice(-RECENT_WINDOW);
 
     let lastError = 'Failed to generate review draft.';
 
+    // 1 single call per round; sirf fail/reject hone par Round 2 chalega
     for (let round = 0; round < MAX_ROUNDS; round++) {
+      const strict = round === 0;
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), CALL_TIMEOUT_MS);
 
-      const winner = await firstValid(
-        Array.from({ length: PARALLEL_CALLS }, () => attempt(apiKey, body, recent, controller.signal))
-      );
-
+      const result = await attempt(apiKey, body, recent, controller.signal, strict);
       clearTimeout(timer);
-      controller.abort(); // Stop the other parallel request after a winner/failure.
 
-      if (winner.ok) {
-        remember(winner.review);
-        return NextResponse.json({ review: winner.review, meta: winner.meta });
+      if (result.ok) {
+        remember(result.review);
+        SERVER_KWS.push(result.meta.seo);
+        while (SERVER_KWS.length > SEO_KEYWORDS.length) SERVER_KWS.shift();
+
+        if (result.usage) {
+          console.log(
+            `[API Cost] ${MODEL} | In: ${result.usage.promptTokenCount} | Out: ${result.usage.candidatesTokenCount} | Total: ${result.usage.totalTokenCount}`
+          );
+        }
+        return NextResponse.json({ review: result.review, meta: result.meta });
       }
-      lastError = winner.error;
+      lastError = result.error;
     }
 
     throw new Error(lastError);
